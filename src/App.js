@@ -32,23 +32,19 @@ export default class App {
          */
         this._files = [
             //single texture
-            {name: 'wall', uri: './assets/' + 'wall' + '.jpg'},
-            {name: 'column', uri: './assets/' + 'column' + '.png'},
+            { name: 'wall', uri: './assets/' + 'wall' + '.jpg' },
+            { name: 'column', uri: './assets/' + 'column' + '.png' },
         ];
     }
 
     init() {
-        //Define html canvas
-        const canvas = document.getElementById("stage");
-
         //Pixi Stage
         this._stage = new PIXI.Container();
 
         //Pixi Render setup
-        this._renderer = PIXI.autoDetectRenderer(
-            this._width, this._height,
-            {view: canvas, backgroundColor: 0x000000}
-        );
+        this._renderer = new PIXI.WebGLRenderer(this._width, this._height, { backgroundColor: 0x000000 });
+
+        document.body.appendChild(this._renderer.view);
 
         this._renderer.view.style.position = "absolute";
         this._renderer.autoResize = true;
