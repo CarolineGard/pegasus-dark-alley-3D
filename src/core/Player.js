@@ -48,7 +48,7 @@ export default class Player extends Entity3D {
          * @type {PIXI.Point}
          * @private
          */
-        this._position = new PIXI.Point(1.5, 1.5);
+        this._position = new PIXI.Point(1, 3.5);
 
         /**
          * Player / Camera facing direction
