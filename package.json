@@ -2,9 +2,6 @@
   "name": "pegasus-dark-alley-3D",
   "version": "1.0.0",
   "main": "./src/index.js",
-  "bin": {
-    "bundle": "bundle.js"
-  },
   "dependencies": {
     "jsdoc": "^3.6.3",
     "pixi.js": "^5.1.5"
