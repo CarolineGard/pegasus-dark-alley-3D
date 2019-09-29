@@ -9,20 +9,27 @@ export default class Player extends Entity3D {
     constructor(map) {
         super();
 
-        this.moveState = -1;
-        this.rotState = -1;
+        this.moveXState = -1;
+        this.moveYState = -1;
+        // this.rotState = -1;
 
-        this.STATE_MOVE = {
+        this.STATE_MOVE_X = {
             NONE: 0,
             FORWARD: 1,
-            BACK: 2
+            BACK: 2,
         };
 
-        this.STATE_ROT = {
+        this.STATE_MOVE_Y = {
             NONE: 0,
             LEFT: 1,
             RIGHT: 2
         };
+
+        // this.STATE_ROT = {
+        //     NONE: 0,
+        //     LEFT: 1,
+        //     RIGHT: 2
+        // };
 
         /**
          * @type {Map}
@@ -76,34 +83,48 @@ export default class Player extends Entity3D {
         document.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
 
+    // When user starts pressing down the key
     onKeyDown(e) {
         if (e.keyCode === 87) {
-            this.moveState = this.STATE_MOVE.FORWARD;
+            this.stateMoveX = this.STATE_MOVE_X.FORWARD;
         }
         else if (e.keyCode === 83) {
-            this.moveState = this.STATE_MOVE.BACK;
+            this.stateMoveX = this.STATE_MOVE_X.BACK;
         }
         else if (e.keyCode === 65) {
-            this.rotState = this.STATE_ROT.LEFT;
+            this.stateMoveY = this.STATE_MOVE_Y.LEFT;
         }
         else if (e.keyCode === 68) {
-            this.rotState = this.STATE_ROT.RIGHT;
+            this.stateMoveY = this.STATE_MOVE_Y.RIGHT;
         }
+        // else if (e.keyCode === 65) {
+        //     this.rotState = this.STATE_ROT.LEFT;
+        // }
+        // else if (e.keyCode === 68) {
+        //     this.rotState = this.STATE_ROT.RIGHT;
+        // }
     }
 
+    // When user releases the key
     onKeyUp(e) {
         if (e.keyCode === 87) {
-            this.moveState = this.STATE_MOVE.NONE;
+            this.stateMoveX = this.STATE_MOVE_X.NONE;
         }
         else if (e.keyCode === 83) {
-            this.moveState = this.STATE_MOVE.NONE;
+            this.stateMoveX = this.STATE_MOVE_X.NONE;
         }
         else if (e.keyCode === 65) {
-            this.rotState = this.STATE_ROT.NONE;
+            this.stateMoveY = this.STATE_MOVE_Y.NONE;
         }
         else if (e.keyCode === 68) {
-            this.rotState = this.STATE_ROT.NONE;
+            this.stateMoveY = this.STATE_MOVE_Y.NONE;
         }
+        // else if (e.keyCode === 65) {
+        //     this.rotState = this.STATE_ROT.NONE;
+        // }
+        // else if (e.keyCode === 68) {
+        //     this.rotState = this.STATE_ROT.NONE;
+        // }
     }
 
     start() {
@@ -132,27 +153,53 @@ export default class Player extends Entity3D {
         }
     }
 
+    // TODO: Do we need dirY?
+    // TODO: Collision handling
+    moveLeft(dt) {
+        const map = this._map.grid;
+        this.y += this._moveSpeed * dt;
+    }
+
+    // TODO: Do we need dirY?
+    // TODO: Collision handling
+    moveRight(dt) {
+        const map = this._map.grid;
+        this.y -= this._moveSpeed * dt;
+    }
+
     update(dt) {
-        switch (this.moveState) {
-            case this.STATE_MOVE.FORWARD: {
+        switch (this.stateMoveX) {
+            case this.STATE_MOVE_X.FORWARD: {
                 this.moveForward(dt);
                 break;
             }
-            case this.STATE_MOVE.BACK: {
+            case this.STATE_MOVE_X.BACK: {
                 this.moveBack(dt);
                 break;
             }
         }
-        switch (this.rotState) {
-            case this.STATE_ROT.LEFT: {
-                this.rotate(this._rotSpeed * dt);
+        switch (this.stateMoveY) {
+            case this.STATE_MOVE_Y.LEFT: {
+                console.log("left");
+                this.moveLeft(dt);
                 break;
             }
-            case this.STATE_ROT.RIGHT: {
-                this.rotate(-this._rotSpeed * dt);
+            case this.STATE_MOVE_Y.RIGHT: {
+                console.log("right");
+                this.moveRight(dt);
                 break;
             }
         }
+        // switch (this.rotState) {
+        //     case this.STATE_ROT.LEFT: {
+        //         this.rotate(this._rotSpeed * dt);
+        //         break;
+        //     }
+        //     case this.STATE_ROT.RIGHT: {
+        //         this.rotate(-this._rotSpeed * dt);
+        //         break;
+        //     }
+        // }
 
         this._camera.update();
     }
