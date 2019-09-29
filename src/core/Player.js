@@ -180,12 +180,10 @@ export default class Player extends Entity3D {
         }
         switch (this.stateMoveY) {
             case this.STATE_MOVE_Y.LEFT: {
-                console.log("left");
                 this.moveLeft(dt);
                 break;
             }
             case this.STATE_MOVE_Y.RIGHT: {
-                console.log("right");
                 this.moveRight(dt);
                 break;
             }
