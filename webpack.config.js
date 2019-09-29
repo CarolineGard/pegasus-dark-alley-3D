@@ -1,16 +1,20 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-    mode: 'production',
     devtool: 'module-source-map',
     entry: './src/index.js',
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build')
+        path: path.resolve('build'),
+        filename: 'index.bundle.js',
+        publicPath: '/',
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            template: './index.html',
+        }),
         new webpack.ProvidePlugin({
             PIXI: 'pixi.js'
         })
