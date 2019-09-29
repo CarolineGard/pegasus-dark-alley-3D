@@ -40,6 +40,7 @@ export default class App {
     init() {
         //Pixi Stage
         this._stage = new PIXI.Container();
+        // PIXI.settings.PREFER_ENV = PIXI.ENV.WEBGL;
 
         var app = new PIXI.Application(this._width, this._height, { backgroundColor: 0x000000 });
         //Pixi Render setup
@@ -47,9 +48,9 @@ export default class App {
 
         document.body.appendChild(app.view);
 
-        this._renderer.view.style.position = "absolute";
-        this._renderer.autoResize = true;
-        this._renderer.resize(window.innerWidth, window.innerHeight);
+        // this._renderer.view.style.position = "absolute";
+        // this._renderer.autoResize = true;
+        // this._renderer.resize(window.innerWidth, window.innerHeight);
 
         // current time and deltaTime
         this._elapsed = Date.now();
@@ -83,7 +84,7 @@ export default class App {
      */
     load(files) {
         console.log("files loading");
-        const loader = PIXI.loader;
+        const loader = PIXI.Loader.shared;
 
         // loop through array and add them to loader
         for (let i = 0; i < files.length; i++) {
