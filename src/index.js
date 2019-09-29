@@ -11,6 +11,15 @@ engine.runRenderLoop(function() {
   scene.render();
 });
 
+// -Animation-
+// engine.runRenderLoop(renderLoop);
+// var alpha = 0;
+// knot.scaling.y = 1.5;
+// scene.beforeRender = () => {
+//   knot.rotation.y = alpha;
+//   alpha += 0.03;
+// };
+
 // Watch for browser/canvas resize events
 window.addEventListener("resize", function() {
   engine.resize();
