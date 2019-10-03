@@ -106,6 +106,32 @@ var playerSphere = scene => {
   material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
   material.alpha = 0.9;
   sphere.material = material;
+
+  // Keyboard events
+  var inputMap = {};
+  scene.actionManager = new BABYLON.ActionManager(scene);
+  scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
+    inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+  }));
+  scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
+    inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+  }));
+
+  // Game/Render loop
+  scene.onBeforeRenderObservable.add(() => {
+    if (inputMap["w"] || inputMap["ArrowUp"]) {
+      sphere.position.z += 0.1
+    }
+    if (inputMap["a"] || inputMap["ArrowLeft"]) {
+      sphere.position.x -= 0.1
+    }
+    if (inputMap["s"] || inputMap["ArrowDown"]) {
+      sphere.position.z -= 0.1
+    }
+    if (inputMap["d"] || inputMap["ArrowRight"]) {
+      sphere.position.x += 0.1
+    }
+  })
 };
 
 export default createScene;
