@@ -1,3 +1,5 @@
+import * as BABYLON from '@babylonjs/core/Legacy/legacy';
+
 /******* Add the create scene function ******/
 var createScene = (engine, canvas) => {
   // Create the scene space
