@@ -1,4 +1,6 @@
-import * as BABYLON from '@babylonjs/core/Legacy/legacy';
+import * as BABYLON from '@babylonjs/core';
+import * as cannon from 'cannon';
+
 
 /******* Add the create scene function ******/
 var createScene = (engine, canvas) => {
@@ -15,6 +17,7 @@ var createScene = (engine, canvas) => {
 
   return scene;
 };
+
 
 var camera = (canvas, scene) => {
   // Add a camera to the scene and attach it to the canvas
@@ -76,7 +79,12 @@ var backgroundSphere = scene => {
 };
 
 var ground = scene => {
-  var plane = BABYLON.MeshBuilder.CreatePlane("plane", {}, scene); // default plane
+  // physics engine
+  scene.enablePhysics(
+    new BABYLON.Vector3(0, -9.8, 0),
+    new BABYLON.CannonJSPlugin(true, 10, cannon)
+  );
+
   var groundPlane = BABYLON.MeshBuilder.CreatePlane(
     "groundPlane",
     { width: 30, height: 100, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
@@ -87,7 +95,18 @@ var ground = scene => {
 
   var material = new BABYLON.StandardMaterial("material", scene);
   material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+  material.ambientColor = new BABYLON.Color3(1, 1, 1);
   groundPlane.material = material;
+
+  var physicsImpostor = new BABYLON.PhysicsImpostor(
+    groundPlane,
+    BABYLON.PhysicsImpostor.BoxImpostor,
+    {
+      mass: 0,
+      restitution: 0.9
+    },
+    scene
+  );
 };
 
 var playerSphere = scene => {
@@ -131,7 +150,21 @@ var playerSphere = scene => {
     if (inputMap["d"] || inputMap["ArrowRight"]) {
       sphere.position.x += 0.1
     }
+    if (inputMap["z"]) {
+      sphere.position.y += 0.5
+    }
   })
+
+  var physicsImpostor = new BABYLON.PhysicsImpostor(
+    sphere,
+    BABYLON.PhysicsImpostor.SphereImpostor,
+    {
+      mass: 1,
+      friction: 0.9,
+      restitution: 0.9
+    },
+    scene
+  );
 };
 
 export default createScene;
