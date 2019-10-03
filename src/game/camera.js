@@ -11,6 +11,9 @@ var setupCamera = (canvas, scene) => {
         scene
     );
     camera.setPosition(new BABYLON.Vector3(0, 5, -20));
+
+    // let camera = new BABYLON.ArcRotateCamera("arcCamera", 0, 0, 0, BABYLON.Vector3.Zero(), this.scene);
+
     camera.attachControl(canvas, true);
 
     // camera.lowerAlphaLimit = Math.PI / 2;
