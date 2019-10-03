@@ -1,5 +1,5 @@
 import * as BABYLON from '@babylonjs/core';
-import camera from './game/camera'
+import setupCamera from './game/camera'
 import light from './game/light'
 import backgroundSphere from './game/skybox'
 import Player from './game/player'
@@ -12,6 +12,7 @@ var createScene = (engine, canvas) => {
   var scene = new BABYLON.Scene(engine);
 
   var camera = setupCamera(canvas, scene);
+  scene.activeCamera = camera;
   light(scene);
   // Add lights to the scene
   var light1 = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 1, 0), scene);
@@ -20,7 +21,7 @@ var createScene = (engine, canvas) => {
   var level = new Level()
   level.setup(scene);
   var player = new Player();
-  player.setup(scene, camera);
+  player.setup(scene);
 
   return scene;
 };

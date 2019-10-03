@@ -9,7 +9,7 @@ class Player {
         };
     }
 
-    setup(scene, camera) {
+    setup(scene) {
         // Add and manipulate meshes in the scene
         var sphere = BABYLON.MeshBuilder.CreateSphere(
             "sphere",
@@ -39,16 +39,16 @@ class Player {
         // Game/Render loop
         scene.onBeforeRenderObservable.add(() => {
             if (inputMap["w"] || inputMap["ArrowUp"]) {
-                sphere.position.z += 0.1
+                sphere.position.z += 0.2
             }
             if (inputMap["a"] || inputMap["ArrowLeft"]) {
-                sphere.position.x -= 0.1
+                sphere.position.x -= 0.2
             }
             if (inputMap["s"] || inputMap["ArrowDown"]) {
-                sphere.position.z -= 0.1
+                sphere.position.z -= 0.2
             }
             if (inputMap["d"] || inputMap["ArrowRight"]) {
-                sphere.position.x += 0.1
+                sphere.position.x += 0.2
             }
             if (inputMap["z"] && sphere.position.y < 5) {
                 this.statuses.JUMPING = true;
@@ -72,8 +72,7 @@ class Player {
             scene
         );
 
-        camera.target = sphere;
-        camera.lockedTarget = sphere;
+        scene.activeCamera.lockedTarget = sphere;
     };
 }
 
