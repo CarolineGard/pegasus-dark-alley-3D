@@ -1,7 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 
 // Add lights to the scene
-var light = scene => {
+var Light = scene => {
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
   var light = new BABYLON.HemisphericLight(
     "light1",
@@ -27,13 +27,13 @@ var light = scene => {
     new BABYLON.Vector3(0, 1, 0), // (up, down, specular)
     scene
   );
-  light1.intensity = 0.5;
+  light1.intensity = 0.9;
   var light2 = new BABYLON.PointLight(
     "light2",
     new BABYLON.Vector3(0, 20, 0),
     scene
   );
-  light2.intensity = 0.3;
+  light2.intensity = 0.5;
 };
 
-export default light;
+export default Light;
