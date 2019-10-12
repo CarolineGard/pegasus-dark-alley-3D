@@ -38,9 +38,6 @@ class Player {
 
         // Game/Render loop
         scene.onBeforeRenderObservable.add(() => {
-            //if (inputMap["w"] || inputMap["ArrowUp"]) {
-            sphere.position.z += 0.5
-            //}
             if (inputMap["a"] || inputMap["ArrowLeft"]) {
                 sphere.position.x -= 0.2
             }

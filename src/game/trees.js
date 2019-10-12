@@ -4,6 +4,9 @@ var Trees = scene => {
   var treeMaterial = new BABYLON.StandardMaterial("material", scene);
   treeMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
 
+  var leftTrees = [];
+  var rightTrees = [];
+
   // we want to randomly genereate trees with varying width(todo)
   // with a z position along the scene with varying positions between -25 and -35 in x
   for (var i = 0; i < 100; i++) {
@@ -25,7 +28,17 @@ var Trees = scene => {
     );
     treeRight.setPositionWithLocalVector(new BABYLON.Vector3(xPos, 5, i * 7));
     treeRight.material = treeMaterial;
+
+    leftTrees.push(treeLeft);
+    rightTrees.push(treeRight);
   }
-};
+
+  scene.registerBeforeRender(() => {
+    for (var i = 0; i < 100; i++) {
+      rightTrees[i].position.z -= 0.5
+      leftTrees[i].position.z -= 0.5
+    }
+  });
+}
 
 export default Trees;

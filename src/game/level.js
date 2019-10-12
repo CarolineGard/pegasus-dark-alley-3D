@@ -22,6 +22,12 @@ class Level {
     material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
     groundPlane.material = material;
 
+    scene.onBeforeRenderObservable.add(() => {
+    })
+    scene.registerBeforeRender(() => {
+      groundPlane.position.z -= 0.5
+    });
+
     var physicsImpostor = new BABYLON.PhysicsImpostor(
       groundPlane,
       BABYLON.PhysicsImpostor.BoxImpostor,
@@ -31,6 +37,7 @@ class Level {
       },
       scene
     );
+
   }
 }
 
