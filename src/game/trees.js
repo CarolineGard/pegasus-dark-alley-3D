@@ -1,4 +1,5 @@
 import * as BABYLON from "@babylonjs/core";
+import { DEFAULT_MOVING_SPEED } from './constants'
 
 var Trees = scene => {
   var treeMaterial = new BABYLON.StandardMaterial("material", scene);
@@ -35,8 +36,8 @@ var Trees = scene => {
 
   scene.registerBeforeRender(() => {
     for (var i = 0; i < 100; i++) {
-      rightTrees[i].position.z -= 0.5
-      leftTrees[i].position.z -= 0.5
+      rightTrees[i].position.z -= DEFAULT_MOVING_SPEED
+      leftTrees[i].position.z -= DEFAULT_MOVING_SPEED
     }
   });
 }
