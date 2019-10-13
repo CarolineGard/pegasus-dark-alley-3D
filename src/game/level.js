@@ -1,5 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 import * as cannon from "cannon";
+import { DEFAULT_MOVING_SPEED } from './constants'
 
 class Level {
   setup(scene) {
@@ -22,6 +23,10 @@ class Level {
     material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
     groundPlane.material = material;
 
+    scene.registerBeforeRender(() => {
+      groundPlane.position.z -= DEFAULT_MOVING_SPEED
+    });
+
     var physicsImpostor = new BABYLON.PhysicsImpostor(
       groundPlane,
       BABYLON.PhysicsImpostor.BoxImpostor,
@@ -31,6 +36,7 @@ class Level {
       },
       scene
     );
+
   }
 }
 
