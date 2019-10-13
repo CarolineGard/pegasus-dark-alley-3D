@@ -9,8 +9,10 @@ var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 var scene = createScene(engine, canvas); //Call the createScene function
 
 // Register a render loop to repeatedly render the scene
-engine.runRenderLoop(function () {
-  scene.render();
+scene.executeWhenReady(() => {
+  engine.runRenderLoop(() => {
+    scene.render();
+  });
 });
 
 // -Animation-
