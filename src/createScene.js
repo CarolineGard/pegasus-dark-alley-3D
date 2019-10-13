@@ -6,6 +6,7 @@ import Player from "./game/player";
 import Level from "./game/level";
 import sceneEffects from "./game/sceneEffects";
 import Trees from "./game/trees";
+import gui from "./game/gui";
 
 /******* Add the create scene function ******/
 var createScene = (engine, canvas) => {
@@ -25,6 +26,7 @@ var createScene = (engine, canvas) => {
 
   var player = new Player();
   player.setup(scene);
+  gui(scene, player)
 
   return scene;
 };

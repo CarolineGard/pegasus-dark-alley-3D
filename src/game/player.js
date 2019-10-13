@@ -7,6 +7,11 @@ class Player {
             'JUMPING': false,
             'DEAD': false
         };
+        this.points = 0;
+    }
+
+    getPoints() {
+        return this.points;
     }
 
     setup(scene) {
