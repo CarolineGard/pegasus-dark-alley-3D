@@ -7,16 +7,21 @@ class Player {
             'JUMPING': false,
             'DEAD': false
         };
+        this.points = 0;
+    }
+
+    getPoints() {
+        return this.points;
     }
 
     setup(scene) {
         // Add and manipulate meshes in the scene
-        var sphere = BABYLON.MeshBuilder.CreateSphere(
-            "sphere",
+        var player = BABYLON.MeshBuilder.CreateSphere(
+            "player",
             { diameter: 1 },
             scene
         );
-        sphere.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
+        player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
 
         var material = new BABYLON.StandardMaterial("material", scene);
         material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
@@ -24,7 +29,7 @@ class Player {
         material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
         material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
         material.alpha = 0.9;
-        sphere.material = material;
+        player.material = material;
 
         // Keyboard events
         var inputMap = {};
@@ -39,19 +44,19 @@ class Player {
         // Game/Render loop
         scene.onBeforeRenderObservable.add(() => {
             if (inputMap["a"] || inputMap["ArrowLeft"]) {
-                sphere.position.x -= 0.2
+                player.position.x -= 0.2
             }
             if (inputMap["s"] || inputMap["ArrowDown"]) {
-                sphere.position.z -= 0.2
+                player.position.z -= 0.2
             }
             if (inputMap["d"] || inputMap["ArrowRight"]) {
-                sphere.position.x += 0.2
+                player.position.x += 0.2
             }
-            if (inputMap["z"] && sphere.position.y < 5) {
+            if (inputMap["z"] && player.position.y < 5) {
                 this.statuses.JUMPING = true;
-                sphere.position.y += 0.5
+                player.position.y += 0.5
             }
-            if (sphere.position.y < -30) {
+            if (player.position.y < -30) {
                 this.statuses.DEAD = true;
                 location.reload(true);
             }
@@ -59,7 +64,7 @@ class Player {
 
 
         var physicsImpostor = new BABYLON.PhysicsImpostor(
-            sphere,
+            player,
             BABYLON.PhysicsImpostor.SphereImpostor,
             {
                 mass: 10,
@@ -69,7 +74,7 @@ class Player {
             scene
         );
 
-        scene.activeCamera.lockedTarget = sphere;
+        scene.activeCamera.lockedTarget = player;
     };
 }
 
