@@ -1,6 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 import * as cannon from "cannon";
-import { DEFAULT_MOVING_SPEED } from './constants'
+import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Level {
   setup(scene) {
@@ -10,21 +10,37 @@ class Level {
       new BABYLON.CannonJSPlugin(true, 10, cannon)
     );
 
-    var groundPlane = BABYLON.MeshBuilder.CreatePlane(
+    var shaderMaterial = new BABYLON.ShaderMaterial(
+      "shader",
+      scene,
       "groundPlane",
-      { width: 30, height: 500, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
+      {
+        attributes: ["position", "normal", "uv"],
+        uniforms: [
+          "world",
+          "worldView",
+          "worldViewProjection",
+          "view",
+          "projection"
+        ]
+      }
+    );
+
+    var groundPlane = BABYLON.MeshBuilder.CreateGround(
+      "groundPlane",
+      {
+        width: 100,
+        height: 500,
+        updatable: true,
+        subdivisions: 1000
+      },
       scene
     );
-    groundPlane.setPositionWithLocalVector(new BABYLON.Vector3(0, -5, -20));
-    groundPlane.rotation.x = Math.PI / 2;
-
-    var material = new BABYLON.StandardMaterial("material", scene);
-    material.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
-    groundPlane.material = material;
+    groundPlane.setPositionWithLocalVector(new BABYLON.Vector3(0, -50, -20));
+    groundPlane.material = shaderMaterial;
 
     scene.registerBeforeRender(() => {
-      groundPlane.position.z -= DEFAULT_MOVING_SPEED
+      groundPlane.position.z -= DEFAULT_MOVING_SPEED;
     });
 
     var physicsImpostor = new BABYLON.PhysicsImpostor(
@@ -36,7 +52,6 @@ class Level {
       },
       scene
     );
-
   }
 }
 

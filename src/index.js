@@ -1,4 +1,4 @@
-import * as BABYLON from '@babylonjs/core/Legacy/legacy';
+import * as BABYLON from "@babylonjs/core/Legacy/legacy";
 
 import createScene from "./createScene.js";
 
@@ -25,6 +25,6 @@ scene.executeWhenReady(() => {
 // };
 
 // Watch for browser/canvas resize events
-window.addEventListener("resize", function () {
+window.addEventListener("resize", function() {
   engine.resize();
 });
