@@ -1,9 +1,17 @@
 import * as BABYLON from "@babylonjs/core";
-import { DEFAULT_MOVING_SPEED } from './constants'
+import { DEFAULT_MOVING_SPEED } from "./constants";
 
 var Trees = scene => {
   var treeMaterial = new BABYLON.StandardMaterial("material", scene);
   treeMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+
+  var tree = BABYLON.MeshBuilder.CreatePlane(
+    "treeLeft",
+    { width: 4, height: 250 },
+    scene
+  );
+  tree.setPositionWithLocalVector(new BABYLON.Vector3.Zero());
+  tree.material = treeMaterial;
 
   var leftTrees = [];
   var rightTrees = [];
@@ -14,32 +22,27 @@ var Trees = scene => {
     const xPos = Math.floor(Math.random() * 45) + 35;
     const width = Math.floor(Math.random() * 6) + 3;
 
-    var treeLeft = BABYLON.MeshBuilder.CreatePlane(
-      "treeLeft",
-      { width: width, height: 250, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
-      scene
-    );
+    let treeLeft = tree.clone();
     treeLeft.setPositionWithLocalVector(new BABYLON.Vector3(-xPos, 5, i * 15));
-    treeLeft.material = treeMaterial;
+    treeLeft.width = width;
 
-    var treeRight = BABYLON.MeshBuilder.CreatePlane(
-      "treeRight",
-      { width: width, height: 250, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
-      scene
-    );
-    treeRight.setPositionWithLocalVector(new BABYLON.Vector3(xPos, 5, i * 7));
-    treeRight.material = treeMaterial;
+    let treeRight = tree.clone();
+    treeRight.setPositionWithLocalVector(new BABYLON.Vector3(xPos, 5, i * 15));
+    treeRight.width = width;
 
     leftTrees.push(treeLeft);
     rightTrees.push(treeRight);
   }
 
+  // remove clone tree
+  tree.dispose();
+
   scene.registerBeforeRender(() => {
     for (var i = 0; i < 100; i++) {
-      rightTrees[i].position.z -= DEFAULT_MOVING_SPEED
-      leftTrees[i].position.z -= DEFAULT_MOVING_SPEED
+      rightTrees[i].position.z -= DEFAULT_MOVING_SPEED;
+      leftTrees[i].position.z -= DEFAULT_MOVING_SPEED;
     }
   });
-}
+};
 
 export default Trees;
