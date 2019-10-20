@@ -29,7 +29,17 @@ class Player {
     material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
     material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
     material.alpha = 0.9;
+
     player.material = material;
+
+    var playerLight = new BABYLON.SpotLight(
+      "playerLight",
+      new BABYLON.Vector3(0, -4, -60),
+      new BABYLON.Vector3(0, 0, 10),
+      Math.PI / 3,
+      2,
+      scene
+    );
 
     // Keyboard events
     let inputMap = {};
