@@ -30,9 +30,13 @@ let updateMeshMaterial = mesh => {
   let randomNumber1 = getRandomNumber();
   let randomNumber2 = getRandomNumber();
 
+  mesh.material.unfreeze();
+
   // Generate a new vertex randomixed texture for the material
   mesh.material.setFloat("randomNumber1", randomNumber1);
   mesh.material.setFloat("randomNumber2", randomNumber2);
+
+  mesh.material.freeze();
 
   mesh.position.z = UPDATE_POSITION;
 };
@@ -61,8 +65,8 @@ class Level {
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
 
-    let shaderMaterial = createShaderMaterial();
-    groundPlane1.material = shaderMaterial;
+    let shaderMaterial1 = createShaderMaterial();
+    groundPlane1.material = shaderMaterial1;
 
     // Second ground
     let groundPlane2 = groundPlane1.clone("groundPlane2");
@@ -79,6 +83,9 @@ class Level {
       randomNumber2
     );
     groundPlane2.material = shaderMaterial2;
+
+    shaderMaterial1.freeze();
+    shaderMaterial2.freeze();
 
     // Render Loop
     scene.registerBeforeRender(() => {

@@ -10,8 +10,12 @@ import Gui from "./game/Gui";
 
 /******* Add the create scene function ******/
 const CreateScene = (engine, canvas) => {
-  // Create the scene space
   let scene = new BABYLON.Scene(engine);
+
+  // Reduce calls to gl.clear() by disable the default scene clearing behavior
+  // Safe setting since the viewport will always be 100% filled (inside skybox)
+  scene.autoClear = false; // Color buffer
+  scene.autoClearDepthAndStencil = false; // Depth and stencil
 
   let camera = Camera(canvas, scene);
   scene.activeCamera = camera;
