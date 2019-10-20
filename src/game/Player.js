@@ -76,7 +76,7 @@ class Player {
       player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {
-        mass: 10.0,
+        mass: 0.0,
         friction: 0.3,
         restitution: 0.3
       },

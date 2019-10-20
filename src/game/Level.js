@@ -49,7 +49,7 @@ class Level {
     let groundPlane1 = BABYLON.MeshBuilder.CreateGround(
       "groundPlane1",
       {
-        width: 100,
+        width: 80,
         height: SCENE_LEVEL_LENGTH,
         updatable: true,
         subdivisions: 500
