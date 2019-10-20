@@ -1,18 +1,15 @@
 // Attributes
 attribute vec3 position;
 attribute vec2 uv;
-attribute vec3 normal;
 
 // Uniforms
-uniform mat4 world;
 uniform mat4 worldViewProjection;
+uniform float randomNumber1;
+uniform float randomNumber2;
 
 // Varying
 varying vec2 vUV;
 varying float vHeight;
-varying vec3 vPosition;
-varying vec3 vNormal;
-
 
 // **************** SIMPLEX NOISE *********************
 //
@@ -100,8 +97,8 @@ void main(void) {
     float altitude = 20.0;
     float height;
 
-    noise1 = 1.0 * snoise( vec3(uv.x * 2.0, uv.y * 1.0, 1.0) );
-    noise2 = 1.0 * snoise( vec3(uv.x * 3.0, uv.y * 3.0, 1500.0) );   
+    noise1 = 1.0 * snoise( vec3(uv.x * 2.0, uv.y * 1.0, 1.0) ); 
+    noise2 = 1.0 * snoise( vec3(uv.x * 3.0, uv.y * 3.0, 1500.0) );
     noiseGround = noise1 + noise2;
 
     // for gradient effect at edges
@@ -122,7 +119,6 @@ void main(void) {
 
     vHeight = height;
     vUV = uv;
-    vPosition = vec3(uv.x, uv.y, 0.0 );
 
     gl_Position = worldViewProjection * 
         vec4(position.x, position.y + (vHeight * 40.0), position.z, 1.0);

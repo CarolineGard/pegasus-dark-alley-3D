@@ -2,8 +2,6 @@ precision highp float;
 
 varying vec2 vUV;
 varying float vHeight;
-varying vec3 vPosition;
-varying vec3 vNormal;
 
 uniform sampler2D textureSampler;
 
@@ -72,23 +70,23 @@ vec2 cellular(vec2 P) {
 
 void main(void) {
     vec2 noise1, noise2;
-    vec3 colorBlack, colorBlueDark, colorBlueLight;
+    vec3 colorBlack, colorGrayDark, colorGrayLight;
     vec4 colorHeight, colorNoise1, colorNoise2, finalColor;
     float opacity = 0.1;
     float lightIntensity = 4.0;
-    float colorDamp = 0.8;
+    float colorDimming = 0.05;
     
     colorBlack     = vec3(0.0, 0.0, 0.0);
-    colorBlueDark  = vec3(0.004, 0.2, 0.26);
-    colorBlueLight = vec3(0.15, 0.45, 0.66);
+    colorGrayDark  = vec3(0.01, 0.01, 0.01);
+    colorGrayLight = vec3(0.05, 0.05, 0.05);
 
     noise1 = 1.0 * cellular( vec2(vUV.x * 50.0, vUV.y * 50.0) );
     noise2 = 1.0 * cellular( vec2(vUV.x * 20.0, vUV.y * 15.0) );
     
-    colorNoise1  = vec4( mix( colorBlueLight, colorBlueDark, noise1.x ), opacity ) - 0.3;    
-    colorNoise2  = vec4( mix( colorBlueLight, colorBlueDark, noise2.x ), opacity ) - 0.3;    
-    colorHeight = vec4( mix( colorBlack, colorBlueDark, vHeight ), 1.0 );    
-    finalColor  = (lightIntensity * colorHeight + colorNoise1 + colorNoise2) - colorDamp;    
+    colorNoise1 = vec4( mix( colorGrayLight, colorGrayDark, noise1.x ), opacity );    
+    colorNoise2 = vec4( mix( colorGrayDark, colorGrayLight, noise2.x ), opacity );    
+    colorHeight = vec4( mix( colorBlack, colorGrayDark, vHeight * 2.0 ), 1.0 ) - 0.01;    
+    finalColor  = (lightIntensity * colorHeight + colorNoise1 + colorNoise2) - colorDimming;    
 
     gl_FragColor = finalColor;
 }
