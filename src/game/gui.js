@@ -1,6 +1,6 @@
 import * as GUI from "@babylonjs/gui";
 
-const gui = (scene, player) => {
+const Gui = (scene, player) => {
   let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
   let pointsText = new GUI.TextBlock();
@@ -19,4 +19,4 @@ const gui = (scene, player) => {
   });
 };
 
-export default gui;
+export default Gui;

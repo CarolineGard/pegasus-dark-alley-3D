@@ -1,6 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 
-const skyBox = scene => {
+const SkyBox = scene => {
   let skybox = BABYLON.MeshBuilder.CreateBox("skyBox", { size: 1000.0 }, scene);
   let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
   skyboxMaterial.backFaceCulling = false;
