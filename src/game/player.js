@@ -16,14 +16,14 @@ class Player {
 
   setup(scene) {
     // Add and manipulate meshes in the scene
-    var player = BABYLON.MeshBuilder.CreateSphere(
+    let player = BABYLON.MeshBuilder.CreateSphere(
       "player",
       { diameter: 1 },
       scene
     );
     player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
 
-    var material = new BABYLON.StandardMaterial("material", scene);
+    let material = new BABYLON.StandardMaterial("material", scene);
     material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
     material.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
     material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
@@ -32,7 +32,7 @@ class Player {
     player.material = material;
 
     // Keyboard events
-    var inputMap = {};
+    let inputMap = {};
     scene.actionManager = new BABYLON.ActionManager(scene);
     scene.actionManager.registerAction(
       new BABYLON.ExecuteCodeAction(
@@ -72,7 +72,7 @@ class Player {
       }
     });
 
-    var physicsImpostor = new BABYLON.PhysicsImpostor(
+    let physicsImpostor = new BABYLON.PhysicsImpostor(
       player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {

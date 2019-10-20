@@ -9,24 +9,24 @@ import Trees from "./game/trees";
 import gui from "./game/gui";
 
 /******* Add the create scene function ******/
-var createScene = (engine, canvas) => {
+const createScene = (engine, canvas) => {
   // Create the scene space
-  var scene = new BABYLON.Scene(engine);
+  let scene = new BABYLON.Scene(engine);
 
-  var camera = setupCamera(canvas, scene);
+  let camera = setupCamera(canvas, scene);
   scene.activeCamera = camera;
   Light(scene);
 
   SkyBox(scene);
-  var level = new Level();
+  let level = new Level();
   level.setup(scene);
 
   sceneEffects(scene);
   Trees(scene);
 
-  var player = new Player();
+  let player = new Player();
   player.setup(scene);
-  gui(scene, player)
+  gui(scene, player);
 
   return scene;
 };

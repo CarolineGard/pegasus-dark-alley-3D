@@ -1,8 +1,8 @@
 import * as BABYLON from "@babylonjs/core";
 
-var setupCamera = (canvas, scene) => {
+const setupCamera = (canvas, scene) => {
   // Add a camera to the scene and attach it to the canvas
-  var camera = new BABYLON.ArcRotateCamera(
+  let camera = new BABYLON.ArcRotateCamera(
     "Camera",
     0,
     Math.PI / 2.4,
