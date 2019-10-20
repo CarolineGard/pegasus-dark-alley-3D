@@ -10,4 +10,4 @@ const SceneEffects = scene => {
   scene.fogColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 };
 
-export default sceneEffects;
+export default SceneEffects;

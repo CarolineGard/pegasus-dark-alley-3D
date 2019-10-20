@@ -15,4 +15,4 @@ const SkyBox = scene => {
   skybox.material = skyboxMaterial;
 };
 
-export default skyBox;
+export default SkyBox;
