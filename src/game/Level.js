@@ -87,6 +87,16 @@ class Level {
     shaderMaterial1.freeze();
     shaderMaterial2.freeze();
 
+    groundPlane1.physicsImpostor = new BABYLON.PhysicsImpostor(
+      groundPlane1,
+      BABYLON.PhysicsImpostor.BoxImpostor,
+      {
+        mass: 0.0,
+        restitution: 0.9
+      },
+      scene
+    );
+
     // Render Loop
     scene.registerBeforeRender(() => {
       // If ground plane is behind camera: Update with new position and create new shader material
@@ -98,16 +108,6 @@ class Level {
         updateMeshMaterial(groundPlane2);
       else groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
     });
-
-    let physicsImpostor = new BABYLON.PhysicsImpostor(
-      groundPlane1,
-      BABYLON.PhysicsImpostor.BoxImpostor,
-      {
-        mass: 0.0,
-        restitution: 0.9
-      },
-      scene
-    );
   }
 }
 
