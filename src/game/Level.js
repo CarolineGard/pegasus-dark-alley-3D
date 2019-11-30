@@ -2,8 +2,9 @@ import * as BABYLON from "@babylonjs/core";
 import * as cannon from "cannon";
 import { DEFAULT_MOVING_SPEED, SCENE_LEVEL_LENGTH } from "./constants";
 
+const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
 const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
-const UPDATE_POSITION = SCENE_LEVEL_LENGTH;
+const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH;
 
 let getRandomNumber = (max = 4.0, min = 2.0) => {
   return Math.floor(Math.random() * (max - min) + min) / min;
@@ -90,11 +91,11 @@ class Level {
     // Render Loop
     scene.registerBeforeRender(() => {
       // If ground plane is behind camera: Update with new position and create new shader material
-      if (groundPlane1.position.z < -START_POSITION)
+      if (groundPlane1.position.z < BEHIND_CAMERA_POSITION)
         updateMeshMaterial(groundPlane1);
       else groundPlane1.position.z -= DEFAULT_MOVING_SPEED;
 
-      if (groundPlane2.position.z < -START_POSITION)
+      if (groundPlane2.position.z < BEHIND_CAMERA_POSITION)
         updateMeshMaterial(groundPlane2);
       else groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
     });

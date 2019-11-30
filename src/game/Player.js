@@ -32,7 +32,7 @@ class Player {
 
     player.material = material;
 
-    var playerLight = new BABYLON.SpotLight(
+    new BABYLON.SpotLight(
       "playerLight",
       new BABYLON.Vector3(0, -4, -60),
       new BABYLON.Vector3(0, 0, 10),
@@ -52,6 +52,7 @@ class Player {
         }
       )
     );
+
     scene.actionManager.registerAction(
       new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnKeyUpTrigger,

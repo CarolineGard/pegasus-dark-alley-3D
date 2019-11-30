@@ -12,17 +12,11 @@ let scene = CreateScene(engine, canvas); //Call the createScene function
 scene.executeWhenReady(() => {
   engine.runRenderLoop(() => {
     scene.render();
+
+    var fpsLabel = document.getElementById("fpsLabel");
+    fpsLabel.innerHTML = engine.getFps().toFixed() + " fps";
   });
 });
-
-// -Animation-
-// engine.runRenderLoop(renderLoop);
-// var alpha = 0;
-// knot.scaling.y = 1.5;
-// scene.beforeRender = () => {
-//   knot.rotation.y = alpha;
-//   alpha += 0.03;
-// };
 
 // Watch for browser/canvas resize events
 window.addEventListener("resize", function() {
