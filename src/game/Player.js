@@ -8,20 +8,25 @@ class Player {
       DEAD: false
     };
     this.points = 0;
+    this.player = null;
   }
 
   getPoints() {
     return this.points;
   }
 
+  getPlayer() {
+    return this.player;
+  }
+
   setup(scene) {
     // Add and manipulate meshes in the scene
-    let player = BABYLON.MeshBuilder.CreateSphere(
+    this.player = BABYLON.MeshBuilder.CreateSphere(
       "player",
       { diameter: 1 },
       scene
     );
-    player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
+    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, 40, -60));
 
     let material = new BABYLON.StandardMaterial("material", scene);
     material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
@@ -30,7 +35,7 @@ class Player {
     material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
     material.alpha = 0.9;
 
-    player.material = material;
+    this.player.material = material;
 
     var playerLight = new BABYLON.SpotLight(
       "playerLight",
@@ -64,36 +69,36 @@ class Player {
     // Game/Render loop
     scene.onBeforeRenderObservable.add(() => {
       if (inputMap["a"] || inputMap["ArrowLeft"]) {
-        player.position.x -= 0.2;
+        this.player.position.x -= 0.2;
       }
       if (inputMap["s"] || inputMap["ArrowDown"]) {
-        player.position.z -= 0.2;
+        this.player.position.z -= 0.2;
       }
       if (inputMap["d"] || inputMap["ArrowRight"]) {
-        player.position.x += 0.2;
+        this.player.position.x += 0.2;
       }
-      if (inputMap["z"] && player.position.y < 5) {
+      if (inputMap["z"] && this.player.position.y < 5) {
         this.statuses.JUMPING = true;
-        player.position.y += 0.5;
+        this.player.position.y += 0.5;
       }
-      if (player.position.y < -30) {
+      if (this.player.position.y < -30) {
         this.statuses.DEAD = true;
-        location.reload(true);
+        // location.reload(true);
       }
     });
 
-    let physicsImpostor = new BABYLON.PhysicsImpostor(
-      player,
+    this.player.physicsImpostor = new BABYLON.PhysicsImpostor(
+      this.player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {
-        mass: 0.0,
+        mass: 10.0,
         friction: 0.3,
         restitution: 0.3
       },
       scene
     );
-
-    scene.activeCamera.lockedTarget = player;
+    
+    scene.activeCamera.lockedTarget = this.player;
   }
 }
 

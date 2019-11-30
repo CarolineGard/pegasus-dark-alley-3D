@@ -1,14 +1,18 @@
 // Attributes
 attribute vec3 position;
+attribute vec3 normal;
 attribute vec2 uv;
 
 // Uniforms
+uniform mat4 world;
 uniform mat4 worldViewProjection;
 uniform float randomNumber1;
 uniform float randomNumber2;
 
 // Varying
 varying vec2 vUV;
+varying vec3 vNormal;
+varying vec3 vPosition;
 varying float vHeight;
 
 // **************** SIMPLEX NOISE *********************
@@ -117,9 +121,16 @@ void main(void) {
         height = 0.0;
     }
 
-    vHeight = height;
+// vec4 outPosition = worldViewProjection * vec4(position, 1.0);
+// gl_Position = outPosition;
+vPosition = vec3(world * vec4(position, 1.0));
+vNormal = normalize(vec3(world * vec4(normal, 0.0)));
+vHeight = height;
     vUV = uv;
 
     gl_Position = worldViewProjection * 
         vec4(position.x, position.y + (vHeight * 40.0), position.z, 1.0);
+    // vHeight = height;
+    // vUV = uv;
+    // vNormal = normalize(vec3(worldViewProjection * vec4(normal, 0.0)));
 }

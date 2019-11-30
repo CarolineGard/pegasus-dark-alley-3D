@@ -1,6 +1,8 @@
 precision highp float;
 
 varying vec2 vUV;
+varying vec3 vNormal;
+varying vec3 vPosition;
 varying float vHeight;
 
 uniform sampler2D textureSampler;
