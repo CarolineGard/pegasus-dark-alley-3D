@@ -12,9 +12,6 @@ let scene = CreateScene(engine, canvas); //Call the createScene function
 scene.executeWhenReady(() => {
   engine.runRenderLoop(() => {
     scene.render();
-
-    var fpsLabel = document.getElementById("fpsLabel");
-    fpsLabel.innerHTML = engine.getFps().toFixed() + " fps";
   });
 });
 
