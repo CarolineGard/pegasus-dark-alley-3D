@@ -83,11 +83,11 @@ class Player {
       }
     });
 
-    let physicsImpostor = new BABYLON.PhysicsImpostor(
+    player.physicsImpostor = new BABYLON.PhysicsImpostor(
       player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {
-        mass: 0.0,
+        mass: 1.0,
         friction: 0.3,
         restitution: 0.3
       },

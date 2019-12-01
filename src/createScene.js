@@ -21,12 +21,12 @@ const CreateScene = (engine, canvas) => {
   scene.activeCamera = camera;
   Light(scene);
 
-  // SkyBox(scene);
+  SkyBox(scene);
   let level = new Level();
   level.setup(scene);
 
-  // SceneEffects(scene);
-  // Trees(scene);
+  SceneEffects(scene);
+  Trees(scene);
 
   let player = new Player();
   player.setup(scene);

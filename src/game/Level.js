@@ -6,42 +6,6 @@ const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
 const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
 const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH;
 
-let getRandomNumber = (max = 4.0, min = 2.0) => {
-  return Math.floor(Math.random() * (max - min) + min) / min;
-};
-
-let createShaderMaterial = (scene, rand1 = 1.0, rand2 = 1.0) => {
-  let randomNumber1 = rand1;
-  let randomNumber2 = rand2;
-
-  let shaderMaterial = new BABYLON.ShaderMaterial(
-    "shader",
-    scene,
-    "groundPlane",
-    {
-      attributes: ["position", "normal", "uv"],
-      uniforms: ["worldViewProjection", "randomNumber1", "randomNumber2"],
-      fogEnabled: true
-    }
-  );
-  return shaderMaterial;
-};
-
-let updateMeshMaterial = mesh => {
-  let randomNumber1 = getRandomNumber();
-  let randomNumber2 = getRandomNumber();
-
-  mesh.material.unfreeze();
-
-  // Generate a new vertex randomixed texture for the material
-  mesh.material.setFloat("randomNumber1", randomNumber1);
-  mesh.material.setFloat("randomNumber2", randomNumber2);
-
-  mesh.material.freeze();
-
-  mesh.position.z = UPDATE_POSITION;
-};
-
 class Level {
   setup(scene) {
     // physics engine
@@ -51,13 +15,11 @@ class Level {
     );
 
     // Start ground
-    let groundPlane1 = BABYLON.MeshBuilder.CreateGround(
+    let groundPlane1 = BABYLON.MeshBuilder.CreatePlane(
       "groundPlane1",
       {
-        width: 80,
-        height: SCENE_LEVEL_LENGTH,
-        updatable: true,
-        subdivisions: 500
+        width: 60,
+        height: SCENE_LEVEL_LENGTH
       },
       scene
     );
@@ -66,8 +28,16 @@ class Level {
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
 
-    let shaderMaterial1 = createShaderMaterial();
-    groundPlane1.material = shaderMaterial1;
+    groundPlane1.rotate(BABYLON.Axis.X, Math.PI / 2);
+
+    let material = new BABYLON.StandardMaterial("material", scene);
+    material.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    // material.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    // material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
+    // material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+    material.alpha = 1.0;
+
+    groundPlane1.material = material;
 
     // Second ground
     let groundPlane2 = groundPlane1.clone("groundPlane2");
@@ -75,18 +45,7 @@ class Level {
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
 
-    let randomNumber1 = getRandomNumber();
-    let randomNumber2 = getRandomNumber();
-
-    let shaderMaterial2 = createShaderMaterial(
-      scene,
-      randomNumber1,
-      randomNumber2
-    );
-    groundPlane2.material = shaderMaterial2;
-
-    shaderMaterial1.freeze();
-    shaderMaterial2.freeze();
+    groundPlane2.material = material;
 
     groundPlane1.physicsImpostor = new BABYLON.PhysicsImpostor(
       groundPlane1,
@@ -101,13 +60,17 @@ class Level {
     // Render Loop
     scene.registerBeforeRender(() => {
       // If ground plane is behind camera: Update with new position and create new shader material
-      if (groundPlane1.position.z < BEHIND_CAMERA_POSITION)
-        updateMeshMaterial(groundPlane1);
-      else groundPlane1.position.z -= DEFAULT_MOVING_SPEED;
+      if (groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
+        groundPlane1.position.z = UPDATE_POSITION;
+      } else {
+        groundPlane1.position.z -= DEFAULT_MOVING_SPEED;
+      }
 
-      if (groundPlane2.position.z < BEHIND_CAMERA_POSITION)
-        updateMeshMaterial(groundPlane2);
-      else groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
+      if (groundPlane2.position.z < BEHIND_CAMERA_POSITION) {
+        groundPlane2.position.z = UPDATE_POSITION;
+      } else {
+        groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
+      }
     });
   }
 }
