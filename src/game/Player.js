@@ -77,7 +77,7 @@ class Player {
         this.statuses.JUMPING = true;
         player.position.y += 0.5;
       }
-      if (player.position.y < -30) {
+      if (player.position.y < -70) {
         this.statuses.DEAD = true;
         location.reload(true);
       }
