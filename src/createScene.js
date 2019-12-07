@@ -8,12 +8,14 @@ import Player from "./game/Player";
 import SceneEffects from "./game/SceneEffects";
 import SkyBox from "./game/Skybox";
 import Trees from "./game/Trees";
+import Coins from "./game/Coins";
 
 class Game {
   startGame(scene, level, player) {
     level.resetLevel();
     player.setup(scene);
     Hud(scene, player);
+    Coins(scene, player);
   }
 
   /******* Add the create scene function ******/
