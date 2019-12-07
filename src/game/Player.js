@@ -42,9 +42,9 @@ class Player {
 
     player.material = material;
 
-    var gl = new BABYLON.GlowLayer("glow", scene);
-    gl.intensity = 0.4;
-    gl.addIncludedOnlyMesh(player);
+    var glowLayer = new BABYLON.GlowLayer("glow", scene);
+    glowLayer.intensity = 0.4;
+    glowLayer.addIncludedOnlyMesh(player);
 
     new BABYLON.SpotLight(
       "playerLight",
@@ -145,6 +145,14 @@ class Player {
     //   { diameter: 1 },
     //   scene
     // );
+
+    // star.executeOnIntersection(playerMesh, () => {
+    //     console.log("collision!");
+    //     star = null;
+    // }, true);
+
+    // assetsManager.load();
+
     let star = BABYLON.MeshBuilder.CreateCylinder(
       "cone",
       { diameter: 3, height: 0.3, tessellation: 96 },
@@ -161,9 +169,7 @@ class Player {
     star.material = material2;
     star.setPositionWithLocalVector(new BABYLON.Vector3(0, -48, 150));
     star.rotate(BABYLON.Axis.Z, Math.PI / 2);
-    var gl = new BABYLON.GlowLayer("glow", scene);
-    gl.intensity = 0.4;
-    gl.addIncludedOnlyMesh(star);
+    glowLayer.addIncludedOnlyMesh(star);
     scene.registerBeforeRender(() => {
       star.position.z -= DEFAULT_MOVING_SPEED;
       star.addRotation(0.01, 0, 0);
@@ -176,13 +182,6 @@ class Player {
 
       this.updateTimeAlivePoints();
     });
-
-    // star.executeOnIntersection(playerMesh, () => {
-    //     console.log("collision!");
-    //     star = null;
-    // }, true);
-
-    // assetsManager.load();
 
     scene.activeCamera.lockedTarget = player;
   }
