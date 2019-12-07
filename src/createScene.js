@@ -82,10 +82,10 @@ class Game {
         button.background = "purple";
         button.onPointerUpObservable.add(() => {
           advancedTexture.removeControl(button);    
+          level.resetLevel();
           let player = new Player();
           player.setup(scene);
-             
-           Gui(scene, player);
+          Gui(scene, player);
         });
         advancedTexture.addControl(button);    
     }
