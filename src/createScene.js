@@ -1,14 +1,13 @@
 import * as BABYLON from "@babylonjs/core";
-import * as GUI from "@babylonjs/gui";
 import Camera from "./game/Camera";
-import Light from "./game/Light";
-import SkyBox from "./game/Skybox";
-import Player from "./game/Player";
-import Level from "./game/Level";
-import SceneEffects from "./game/SceneEffects";
-import Trees from "./game/Trees";
-import Hud from "./game/Hud";
 import GuiMenu from "./game/GuiMenu";
+import Hud from "./game/Hud";
+import Level from "./game/Level";
+import Light from "./game/Light";
+import Player from "./game/Player";
+import SceneEffects from "./game/SceneEffects";
+import SkyBox from "./game/Skybox";
+import Trees from "./game/Trees";
 
 class Game {
   startGame(scene, level, player) {
