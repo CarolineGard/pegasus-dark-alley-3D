@@ -1,4 +1,5 @@
 import * as BABYLON from "@babylonjs/core";
+import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Player {
   constructor() {
@@ -93,6 +94,65 @@ class Player {
       },
       scene
     );
+
+    let coin;
+    let assetsManager = new BABYLON.AssetsManager(scene);
+
+    let meshTask = assetsManager.addMeshTask(
+      "skull task",
+      "",
+      "./src/models/",
+      "horse.babylon"
+    );
+
+    // You can handle success and error on a per-task basis (onSuccess, onError)
+    meshTask.onSuccess = function(task) {
+      console.log(task);
+      let material1 = new BABYLON.StandardMaterial("material", scene);
+      material1.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
+      material1.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+      material1.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+      material1.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
+      material1.alpha = 0.9;
+      coin = task.loadedMeshes[0];
+      coin.material = material1;
+      coin.position = new BABYLON.Vector3(0, -4, 100);
+      coin.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
+    };
+
+    scene.registerBeforeRender(() => {
+      if (coin != null) {
+        star.position.z -= DEFAULT_MOVING_SPEED;
+        coin.position.z -= DEFAULT_MOVING_SPEED;
+      }
+    });
+
+    let star = BABYLON.MeshBuilder.CreateSphere(
+      "player",
+      { diameter: 1 },
+      scene
+    );
+    let material2 = new BABYLON.StandardMaterial("material", scene);
+    material2.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
+    material2.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    material2.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+    material2.emissiveColor = new BABYLON.Color4(1, 1, 1, 1);
+    material2.alpha = 0.9;
+    star.material = material2;
+    star.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, 60));
+    scene.registerBeforeRender(() => {
+      if (star.intersectsMesh(player, false)) {
+        this.points++;
+        star.material.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
+      }
+    });
+
+    // star.executeOnIntersection(playerMesh, () => {
+    //     console.log("collision!");
+    //     star = null;
+    // }, true);
+
+    assetsManager.load();
 
     scene.activeCamera.lockedTarget = player;
   }
