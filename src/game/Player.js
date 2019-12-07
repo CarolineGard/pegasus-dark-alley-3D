@@ -8,7 +8,7 @@ class Player {
       JUMPING: false,
       DEAD: false
     };
-    this.gameStartTime = new Date().getTime();
+    this.gameStartTime = null;
     this.collectedPoints = 0;
     this.timeAlivePoints = 0;
   }
@@ -24,6 +24,7 @@ class Player {
   }
 
   setup(scene) {
+    this.gameStartTime = new Date().getTime();
     // Add and manipulate meshes in the scene
     let player = BABYLON.MeshBuilder.CreateSphere(
       "player",
@@ -40,6 +41,10 @@ class Player {
     material.alpha = 0.9;
 
     player.material = material;
+
+    var gl = new BABYLON.GlowLayer("glow", scene);
+    gl.intensity = 0.4;
+    gl.addIncludedOnlyMesh(player);
 
     new BABYLON.SpotLight(
       "playerLight",
@@ -103,55 +108,70 @@ class Player {
       scene
     );
 
-    let coin;
-    let assetsManager = new BABYLON.AssetsManager(scene);
+    // let coin;
+    // let assetsManager = new BABYLON.AssetsManager(scene);
 
-    let meshTask = assetsManager.addMeshTask(
-      "skull task",
-      "",
-      "./src/models/",
-      "horse.babylon"
+    // let meshTask = assetsManager.addMeshTask(
+    //   "skull task",
+    //   "",
+    //   "./src/models/",
+    //   "horse.babylon"
+    // );
+
+    // // You can handle success and error on a per-task basis (onSuccess, onError)
+    // meshTask.onSuccess = function(task) {
+    //   console.log(task);
+    //   let material1 = new BABYLON.StandardMaterial("material", scene);
+    //   material1.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
+    //   material1.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    //   material1.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+    //   material1.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
+    //   material1.alpha = 0.9;
+    //   coin = task.loadedMeshes[0];
+    //   coin.material = material1;
+    //   coin.position = new BABYLON.Vector3(0, 0, 100);
+    //   coin.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
+    // };
+
+    // scene.registerBeforeRender(() => {
+    //   if (coin != null) {
+    //     star.position.z -= DEFAULT_MOVING_SPEED;
+    //     // coin.position.z -= DEFAULT_MOVING_SPEED;
+    //   }
+    // });
+
+    // let star = BABYLON.MeshBuilder.CreateSphere(
+    //   "player",
+    //   { diameter: 1 },
+    //   scene
+    // );
+    let star = BABYLON.MeshBuilder.CreateCylinder(
+      "cone",
+      { diameter: 3, height: 0.3, tessellation: 96 },
+      scene,
+      true
     );
 
-    // You can handle success and error on a per-task basis (onSuccess, onError)
-    meshTask.onSuccess = function(task) {
-      console.log(task);
-      let material1 = new BABYLON.StandardMaterial("material", scene);
-      material1.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
-      material1.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-      material1.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
-      material1.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
-      material1.alpha = 0.9;
-      coin = task.loadedMeshes[0];
-      coin.material = material1;
-      coin.position = new BABYLON.Vector3(0, -4, 100);
-      coin.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
-    };
-
-    scene.registerBeforeRender(() => {
-      if (coin != null) {
-        star.position.z -= DEFAULT_MOVING_SPEED;
-        coin.position.z -= DEFAULT_MOVING_SPEED;
-      }
-    });
-
-    let star = BABYLON.MeshBuilder.CreateSphere(
-      "player",
-      { diameter: 1 },
-      scene
-    );
     let material2 = new BABYLON.StandardMaterial("material", scene);
-    material2.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
-    material2.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-    material2.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
-    material2.emissiveColor = new BABYLON.Color4(1, 1, 1, 1);
+    material2.diffuseColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    material2.specularColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    material2.ambientColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    material2.emissiveColor = new BABYLON.Color3(0.95, 0.7, 0.31);
     material2.alpha = 0.9;
     star.material = material2;
-    star.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, 60));
+    star.setPositionWithLocalVector(new BABYLON.Vector3(0, -48, 150));
+    star.rotate(BABYLON.Axis.Z, Math.PI / 2);
+    var gl = new BABYLON.GlowLayer("glow", scene);
+    gl.intensity = 0.4;
+    gl.addIncludedOnlyMesh(star);
     scene.registerBeforeRender(() => {
+      star.position.z -= DEFAULT_MOVING_SPEED;
+      star.addRotation(0.01, 0, 0);
+      //   star.rotation.x += 0.1;
+
       if (star.intersectsMesh(player, false)) {
-        this.collectedPoints += 1000;
-        star.material.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
+        this.collectedPoints += 100;
+        star.dispose();
       }
 
       this.updateTimeAlivePoints();
@@ -162,7 +182,7 @@ class Player {
     //     star = null;
     // }, true);
 
-    assetsManager.load();
+    // assetsManager.load();
 
     scene.activeCamera.lockedTarget = player;
   }
