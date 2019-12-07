@@ -3,6 +3,7 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Player {
   constructor() {
+    this.player = null;
     this.statuses = {
       RUNNING: true,
       JUMPING: false,
@@ -13,25 +14,36 @@ class Player {
     this.timeAlivePoints = 0;
   }
 
-  updateTimeAlivePoints() {
-    var currentTime = new Date().getTime();
-    let distance = Math.round((currentTime - this.gameStartTime) / 50);
-    this.timeAlivePoints = distance;
+  getPlayer() {
+    return this.player;
+  }
+
+  addPoints() {
+    this.collectedPoints += 100;
   }
 
   getPoints() {
     return this.timeAlivePoints + this.collectedPoints;
   }
 
+  updateTimeAlivePoints() {
+    let currentTime = new Date().getTime();
+    let distance = Math.round((currentTime - this.gameStartTime) / 50);
+    this.timeAlivePoints = distance;
+  }
+
   setup(scene) {
     this.gameStartTime = new Date().getTime();
+
     // Add and manipulate meshes in the scene
-    let player = BABYLON.MeshBuilder.CreateSphere(
+    this.player = BABYLON.MeshBuilder.CreateSphere(
       "player",
       { diameter: 1 },
       scene
     );
-    player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
+
+    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
+    scene.activeCamera.lockedTarget = this.player;
 
     let material = new BABYLON.StandardMaterial("material", scene);
     material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
@@ -40,11 +52,11 @@ class Player {
     material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
     material.alpha = 0.9;
 
-    player.material = material;
+    this.player.material = material;
 
-    var glowLayer = new BABYLON.GlowLayer("glow", scene);
+    let glowLayer = new BABYLON.GlowLayer("glow", scene);
     glowLayer.intensity = 0.4;
-    glowLayer.addIncludedOnlyMesh(player);
+    glowLayer.addIncludedOnlyMesh(this.player);
 
     new BABYLON.SpotLight(
       "playerLight",
@@ -79,26 +91,26 @@ class Player {
     // Game/Render loop
     scene.onBeforeRenderObservable.add(() => {
       if (inputMap["a"] || inputMap["ArrowLeft"]) {
-        player.position.x -= 0.2;
+        this.player.position.x -= 0.2;
       }
       if (inputMap["s"] || inputMap["ArrowDown"]) {
-        player.position.z -= 0.2;
+        this.player.position.z -= 0.2;
       }
       if (inputMap["d"] || inputMap["ArrowRight"]) {
-        player.position.x += 0.2;
+        this.player.position.x += 0.2;
       }
-      if (inputMap["z"] && player.position.y < 5) {
+      if (inputMap["z"] && this.player.position.y < 5) {
         this.statuses.JUMPING = true;
-        player.position.y += 0.5;
+        this.player.position.y += 0.5;
       }
-      if (player.position.y < -70) {
+      if (this.player.position.y < -70) {
         this.statuses.DEAD = true;
         location.reload(true);
       }
     });
 
-    player.physicsImpostor = new BABYLON.PhysicsImpostor(
-      player,
+    this.player.physicsImpostor = new BABYLON.PhysicsImpostor(
+      this.player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {
         mass: 1.0,
@@ -108,82 +120,9 @@ class Player {
       scene
     );
 
-    // let coin;
-    // let assetsManager = new BABYLON.AssetsManager(scene);
-
-    // let meshTask = assetsManager.addMeshTask(
-    //   "skull task",
-    //   "",
-    //   "./src/models/",
-    //   "horse.babylon"
-    // );
-
-    // // You can handle success and error on a per-task basis (onSuccess, onError)
-    // meshTask.onSuccess = function(task) {
-    //   console.log(task);
-    //   let material1 = new BABYLON.StandardMaterial("material", scene);
-    //   material1.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
-    //   material1.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-    //   material1.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
-    //   material1.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
-    //   material1.alpha = 0.9;
-    //   coin = task.loadedMeshes[0];
-    //   coin.material = material1;
-    //   coin.position = new BABYLON.Vector3(0, 0, 100);
-    //   coin.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
-    // };
-
-    // scene.registerBeforeRender(() => {
-    //   if (coin != null) {
-    //     star.position.z -= DEFAULT_MOVING_SPEED;
-    //     // coin.position.z -= DEFAULT_MOVING_SPEED;
-    //   }
-    // });
-
-    // let star = BABYLON.MeshBuilder.CreateSphere(
-    //   "player",
-    //   { diameter: 1 },
-    //   scene
-    // );
-
-    // star.executeOnIntersection(playerMesh, () => {
-    //     console.log("collision!");
-    //     star = null;
-    // }, true);
-
-    // assetsManager.load();
-
-    let star = BABYLON.MeshBuilder.CreateCylinder(
-      "cone",
-      { diameter: 3, height: 0.3, tessellation: 96 },
-      scene,
-      true
-    );
-
-    let material2 = new BABYLON.StandardMaterial("material", scene);
-    material2.diffuseColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-    material2.specularColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-    material2.ambientColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-    material2.emissiveColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-    material2.alpha = 0.9;
-    star.material = material2;
-    star.setPositionWithLocalVector(new BABYLON.Vector3(0, -48, 150));
-    star.rotate(BABYLON.Axis.Z, Math.PI / 2);
-    glowLayer.addIncludedOnlyMesh(star);
     scene.registerBeforeRender(() => {
-      star.position.z -= DEFAULT_MOVING_SPEED;
-      star.addRotation(0.01, 0, 0);
-      //   star.rotation.x += 0.1;
-
-      if (star.intersectsMesh(player, false)) {
-        this.collectedPoints += 100;
-        star.dispose();
-      }
-
       this.updateTimeAlivePoints();
     });
-
-    scene.activeCamera.lockedTarget = player;
   }
 }
 
