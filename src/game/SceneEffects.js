@@ -1,7 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 
 // Add effects to the scene surrounding such as fog, shadows, grains etc.
-var sceneEffects = scene => {
+const SceneEffects = scene => {
   // Add fog to the scene
   scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
   scene.fogDensity = 0.01;
@@ -10,4 +10,4 @@ var sceneEffects = scene => {
   scene.fogColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 };
 
-export default sceneEffects;
+export default SceneEffects;

@@ -1,34 +1,46 @@
 import * as BABYLON from "@babylonjs/core";
-import setupCamera from "./game/camera";
-import Light from "./game/light";
-import SkyBox from "./game/skybox";
-import Player from "./game/player";
-import Level from "./game/level";
-import sceneEffects from "./game/sceneEffects";
-import Trees from "./game/trees";
-import gui from "./game/gui";
+import * as GUI from "@babylonjs/gui";
+import Camera from "./game/Camera";
+import Light from "./game/Light";
+import SkyBox from "./game/Skybox";
+import Player from "./game/Player";
+import Level from "./game/Level";
+import SceneEffects from "./game/SceneEffects";
+import Trees from "./game/Trees";
+import Hud from "./game/Hud";
+import GuiMenu from "./game/GuiMenu";
 
-/******* Add the create scene function ******/
-var createScene = (engine, canvas) => {
-  // Create the scene space
-  var scene = new BABYLON.Scene(engine);
+class Game {
+  startGame(scene, level, player) {
+    level.resetLevel();
+    player.setup(scene);
+    Hud(scene, player);
+  }
 
-  var camera = setupCamera(canvas, scene);
-  scene.activeCamera = camera;
-  Light(scene);
+  /******* Add the create scene function ******/
+  CreateScene(engine, canvas) {
+    let scene = new BABYLON.Scene(engine);
 
-  SkyBox(scene);
-  var level = new Level();
-  level.setup(scene);
+    // Reduce calls to gl.clear() by disable the default scene clearing behavior
+    // Safe setting since the viewport will always be 100% filled (inside skybox)
+    scene.autoClear = false; // Color buffer
+    scene.autoClearDepthAndStencil = false; // Depth and stencil
 
-  sceneEffects(scene);
-  Trees(scene);
+    let camera = Camera(canvas, scene);
+    scene.activeCamera = camera;
+    Light(scene);
 
-  var player = new Player();
-  player.setup(scene);
-  gui(scene, player)
+    SkyBox(scene);
+    let level = new Level();
+    let player = new Player();
+    level.setup(scene);
 
-  return scene;
-};
+    SceneEffects(scene);
+    Trees(scene);
+    GuiMenu(scene, level, player, this.startGame);
 
-export default createScene;
+    return scene;
+  }
+}
+
+export default Game;
