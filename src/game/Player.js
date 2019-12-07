@@ -8,11 +8,19 @@ class Player {
       JUMPING: false,
       DEAD: false
     };
-    this.points = 0;
+    this.gameStartTime = new Date().getTime();
+    this.collectedPoints = 0;
+    this.timeAlivePoints = 0;
+  }
+
+  updateTimeAlivePoints() {
+    var currentTime = new Date().getTime();
+    let distance = Math.round((currentTime - this.gameStartTime) / 50);
+    this.timeAlivePoints = distance;
   }
 
   getPoints() {
-    return this.points;
+    return this.timeAlivePoints + this.collectedPoints;
   }
 
   setup(scene) {
@@ -142,9 +150,11 @@ class Player {
     star.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, 60));
     scene.registerBeforeRender(() => {
       if (star.intersectsMesh(player, false)) {
-        this.points++;
+        this.collectedPoints += 1000;
         star.material.emissiveColor = new BABYLON.Color4(1, 0, 0, 1);
       }
+
+      this.updateTimeAlivePoints();
     });
 
     // star.executeOnIntersection(playerMesh, () => {
