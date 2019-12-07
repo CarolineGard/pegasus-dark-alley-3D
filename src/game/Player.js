@@ -15,7 +15,6 @@ class Player {
   }
 
   setup(scene) {
-    console.log({scene});
     // Add and manipulate meshes in the scene
     let player = BABYLON.MeshBuilder.CreateSphere(
       "player",

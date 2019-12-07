@@ -9,6 +9,7 @@ import SceneEffects from "./game/SceneEffects";
 import Trees from "./game/Trees";
 import Hud from "./game/Hud";
 import GuiMenu from "./game/GuiMenu";
+
 class Game {
   startGame(scene, level, player) {
     level.resetLevel();
