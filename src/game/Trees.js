@@ -1,4 +1,5 @@
 import * as BABYLON from "@babylonjs/core";
+
 import { DEFAULT_MOVING_SPEED } from "./constants";
 
 const Trees = scene => {

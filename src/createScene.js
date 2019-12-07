@@ -1,12 +1,13 @@
 import * as BABYLON from "@babylonjs/core";
 import Camera from "./game/Camera";
-import Light from "./game/Light";
-import SkyBox from "./game/Skybox";
-import Player from "./game/Player";
-import Level from "./game/Level";
-import SceneEffects from "./game/SceneEffects";
-import Trees from "./game/Trees";
 import Gui from "./game/Gui";
+import GuiStartMenu from "./game/GuiStartMenu";
+import Level from "./game/Level";
+import Light from "./game/Light";
+import Player from "./game/Player";
+import SceneEffects from "./game/SceneEffects";
+import SkyBox from "./game/Skybox";
+import Trees from "./game/Trees";
 
 /******* Add the create scene function ******/
 const CreateScene = (engine, canvas) => {
@@ -20,6 +21,8 @@ const CreateScene = (engine, canvas) => {
   let camera = Camera(canvas, scene);
   scene.activeCamera = camera;
   Light(scene);
+
+  GuiStartMenu(scene);
 
   SkyBox(scene);
   let level = new Level();
