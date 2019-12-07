@@ -11,11 +11,11 @@ let game = new Game();
 let scene = game.CreateScene(engine, canvas); //Call the createScene function
 
 // Register a render loop to repeatedly render the scene
-scene.executeWhenReady(() => {
-  engine.runRenderLoop(() => {
-    scene.render();
-  });
+// scene.executeWhenReady(() => {
+engine.runRenderLoop(() => {
+  scene.render();
 });
+// });
 
 // Watch for browser/canvas resize events
 window.addEventListener("resize", function() {
