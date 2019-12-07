@@ -41,8 +41,6 @@ class Level {
 
     this.groundPlane1.material = material;
 
-    Obstacles(scene, this.groundPlane1);
-
     this.groundPlane1.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
@@ -53,25 +51,50 @@ class Level {
 
     this.groundPlane2.material = material;
 
-    Obstacles(scene, this.groundPlane2);
-
     this.groundPlane2.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
 
-    this.groundPlane1.physicsImpostor = new BABYLON.PhysicsImpostor(
-      this.groundPlane1,
+    let test = BABYLON.MeshBuilder.CreateBox(
+      "test",
+      { width: 20, height: 20, depth: 0.5 },
+      scene
+    );
+    test.setPositionWithLocalVector(new BABYLON.Vector3(0, -10, 250));
+
+    let testMat = new BABYLON.StandardMaterial("material", scene);
+    testMat.diffuseColor = new BABYLON.Color3(255, 0, 0);
+    test.material = testMat;
+
+    test.physicsImpostor = new BABYLON.PhysicsImpostor(
+      test,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      {
-        mass: 0.0,
-        restitution: 0.9
-      },
+      { mass: 1, restitution: 0.9 },
       scene
     );
 
+    [this.groundPlane1, this.groundPlane2].forEach(ground => {
+      ground.physicsImpostor = new BABYLON.PhysicsImpostor(
+        ground,
+        BABYLON.PhysicsImpostor.BoxImpostor,
+        {
+          mass: 0.0,
+          restitution: 0.9
+        },
+        scene
+      );
+    });
+    // Add obstacles for each plane
+    // Obstacles(scene, this.groundPlane1);
+    // Obstacles(scene, this.groundPlane2);
+
     // Render Loop
     scene.registerBeforeRender(() => {
+      if (test.intersectsMesh(player.getPlayer(), false)) {
+        console.log("INTERSECT");
+      }
       // If ground plane is behind camera: Update with new position and create new shader material
+      test.position.z -= DEFAULT_MOVING_SPEED;
       if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane1.position.z = UPDATE_POSITION;
       } else {

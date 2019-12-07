@@ -5,7 +5,7 @@ import { SCENE_LEVEL_LENGTH } from "./constants";
 const Obstacles = (scene, level) => {
   const NUMBER_OF_OBSTACLES = 10;
   const Z_POS_DIFFERENCE = SCENE_LEVEL_LENGTH / NUMBER_OF_OBSTACLES;
-  let DEFAULT_HEIGHT = 400;
+  let DEFAULT_HEIGHT = 200;
   let DEFAULT_WIDTH = 10;
 
   let obstacleMaterial = new BABYLON.StandardMaterial("material", scene);
@@ -46,10 +46,18 @@ const Obstacles = (scene, level) => {
     xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 
     object.setPositionWithLocalVector(
-      new BABYLON.Vector3(xPos, 0, i * Z_POS_DIFFERENCE - 200)
+      new BABYLON.Vector3(xPos, DEFAULT_HEIGHT / 2, i * Z_POS_DIFFERENCE - 200)
     );
 
     object.parent = level;
+
+    object.physicsImpostor = new BABYLON.PhysicsImpostor(
+      object,
+      BABYLON.PhysicsImpostor.BoxImpostor,
+      { mass: 0.0 },
+      scene
+    );
+
     obstacles.push(object);
   }
   // remove clone obstacle
