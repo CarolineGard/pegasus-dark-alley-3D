@@ -33,7 +33,7 @@ class Level {
     this.groundPlane1 = BABYLON.MeshBuilder.CreatePlane(
       "groundPlane1",
       {
-        width: SCENE_LEVEL_WIDTH,
+        width: SCENE_LEVEL_WIDTH / 3,
         height: SCENE_LEVEL_LENGTH
       },
       scene
