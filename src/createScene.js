@@ -1,6 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import Camera from "./game/Camera";
 import GuiMenu from "./game/GuiMenu";
+import GuiRestartMenu from "./game/GuiRestartMenu";
 import Hud from "./game/Hud";
 import Level from "./game/Level";
 import Light from "./game/Light";
@@ -11,9 +12,22 @@ import Trees from "./game/Trees";
 import Coins from "./game/Coins";
 
 class Game {
-  startGame(scene, level, player, trees) {
+  constructor() {
+    this.currentLevel = 0;
+    this.levelIsActive = false;
+    this.startGame = this.startGame.bind(this);
+    this.setCurrentLevel = this.setCurrentLevel.bind(this);
+  }
+
+  setCurrentLevel(nr) {
+    this.levelIsActive = false;
+    this.currentLevel = nr;
+  }
+
+  startGame(scene, level, player, trees, engine) {
+    console.log("startGame");
     level.resetLevel();
-    player.setup(scene);
+    player.setup(scene, this.setCurrentLevel);
     trees.reset();
     trees.setup(scene);
     Hud(scene, player);
@@ -41,7 +55,20 @@ class Game {
     trees.setup(scene);
 
     SceneEffects(scene);
-    GuiMenu(scene, level, player, trees, this.startGame);
+    GuiMenu(scene, level, player, trees, engine, this.startGame);
+
+    scene.registerBeforeRender(() => {
+      if (!this.levelIsActive) {
+        if (this.currentLevel === 0) {
+        } else if (this.currentLevel === 1) {
+        } else if (this.currentLevel === 2) {
+          console.log("gui restart");
+          GuiRestartMenu(scene, level, player, trees, engine, this.startGame);
+        }
+
+        this.levelIsActive = true;
+      }
+    });
 
     return scene;
   }
