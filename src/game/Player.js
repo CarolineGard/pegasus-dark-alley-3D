@@ -32,7 +32,7 @@ class Player {
     this.timeAlivePoints = distance;
   }
 
-  setup(scene) {
+  setup(scene, setCurrentLevel) {
     this.gameStartTime = new Date().getTime();
 
     // Add and manipulate meshes in the scene
@@ -103,9 +103,9 @@ class Player {
         this.statuses.JUMPING = true;
         this.player.position.y += 0.5;
       }
-      if (this.player.position.y < -70) {
+      if (this.player.position.y < -70 && !this.statuses.DEAD) {
         this.statuses.DEAD = true;
-        location.reload(true);
+        setCurrentLevel(2);
       }
     });
 
