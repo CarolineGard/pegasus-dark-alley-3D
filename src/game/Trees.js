@@ -34,12 +34,18 @@ class Trees {
         new BABYLON.Vector3(-xPos, 5, i * 15)
       );
       treeLeft.width = width;
+      treeLeft.registerBeforeRender(() => {
+        treeLeft.position.z -= DEFAULT_MOVING_SPEED;
+      });
 
       let treeRight = tree.clone();
       treeRight.setPositionWithLocalVector(
         new BABYLON.Vector3(xPos, 5, i * 15)
       );
       treeRight.width = width;
+      treeRight.registerBeforeRender(() => {
+        treeRight.position.z -= DEFAULT_MOVING_SPEED;
+      });
 
       this.leftTrees.push(treeLeft);
       this.rightTrees.push(treeRight);
@@ -47,13 +53,6 @@ class Trees {
 
     // remove clone tree
     tree.dispose();
-
-    scene.registerBeforeRender(() => {
-      for (let i = 0; i < 100; i++) {
-        this.rightTrees[i].position.z -= DEFAULT_MOVING_SPEED;
-        this.leftTrees[i].position.z -= DEFAULT_MOVING_SPEED;
-      }
-    });
   }
 
   reset() {
