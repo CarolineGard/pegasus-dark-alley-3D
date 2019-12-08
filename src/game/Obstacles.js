@@ -7,7 +7,7 @@ class Obstacles {
     this.obstacles = [];
   }
 
-  setup(scene) {
+  setup(scene, setCurrentGameMode, player) {
     const NUMBER_OF_OBSTACLES = 10;
     const Z_POS_DIFFERENCE = SCENE_LEVEL_LENGTH / NUMBER_OF_OBSTACLES;
     const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
@@ -64,6 +64,10 @@ class Obstacles {
       );
 
       object.registerBeforeRender(() => {
+        if (object.intersectsMesh(player.getPlayer(), false)) {
+          setCurrentGameMode(2); // reset game
+        }
+
         if (object.position.z < BEHIND_CAMERA_POSITION) {
           object.position.z = UPDATE_POSITION;
         } else {
