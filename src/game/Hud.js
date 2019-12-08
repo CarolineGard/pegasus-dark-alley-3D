@@ -14,7 +14,7 @@ const Gui = (scene, player) => {
 
   advancedTexture.addControl(pointsText);
 
-  scene.registerBeforeRender(() => {
+  advancedTexture.registerBeforeRender(() => {
     pointsText.text = player.getPoints().toString();
   });
 };
