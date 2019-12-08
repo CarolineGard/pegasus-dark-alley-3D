@@ -35,6 +35,8 @@ class Player {
   }
 
   setup(scene, setCurrentLevel) {
+    this.statuses.DEAD = false;
+    this.collectedPoints = 0;
     this.gameStartTime = new Date().getTime();
 
     // Add and manipulate meshes in the scene
