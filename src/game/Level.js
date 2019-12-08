@@ -18,7 +18,7 @@ class Level {
     this.groundPlane2 = null;
   }
 
-  setup(scene) {
+  setup(scene, player) {
     // physics engine
     scene.enablePhysics(
       new BABYLON.Vector3(0, -9.8, 0),
@@ -55,23 +55,7 @@ class Level {
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
 
-    let test = BABYLON.MeshBuilder.CreateBox(
-      "test",
-      { width: 20, height: 20, depth: 0.5 },
-      scene
-    );
-    test.setPositionWithLocalVector(new BABYLON.Vector3(0, -10, 250));
-
-    let testMat = new BABYLON.StandardMaterial("material", scene);
-    testMat.diffuseColor = new BABYLON.Color3(255, 0, 0);
-    test.material = testMat;
-
-    test.physicsImpostor = new BABYLON.PhysicsImpostor(
-      test,
-      BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 1, restitution: 0.9 },
-      scene
-    );
+    Obstacles(scene);
 
     [this.groundPlane1, this.groundPlane2].forEach(ground => {
       ground.physicsImpostor = new BABYLON.PhysicsImpostor(
@@ -84,17 +68,9 @@ class Level {
         scene
       );
     });
-    // Add obstacles for each plane
-    // Obstacles(scene, this.groundPlane1);
-    // Obstacles(scene, this.groundPlane2);
 
     // Render Loop
     scene.registerBeforeRender(() => {
-      if (test.intersectsMesh(player.getPlayer(), false)) {
-        console.log("INTERSECT");
-      }
-      // If ground plane is behind camera: Update with new position and create new shader material
-      test.position.z -= DEFAULT_MOVING_SPEED;
       if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane1.position.z = UPDATE_POSITION;
       } else {

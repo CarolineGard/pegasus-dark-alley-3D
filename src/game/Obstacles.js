@@ -1,32 +1,34 @@
 import * as BABYLON from "@babylonjs/core";
 
-import { SCENE_LEVEL_LENGTH } from "./constants";
+import { SCENE_LEVEL_LENGTH, DEFAULT_MOVING_SPEED } from "./constants";
 
-const Obstacles = (scene, level) => {
+const Obstacles = scene => {
   const NUMBER_OF_OBSTACLES = 10;
   const Z_POS_DIFFERENCE = SCENE_LEVEL_LENGTH / NUMBER_OF_OBSTACLES;
-  let DEFAULT_HEIGHT = 200;
-  let DEFAULT_WIDTH = 10;
+  const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
+  const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
+  const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH;
+
+  let defaultHeight = 200;
+  let defaultWidth = 10;
 
   let obstacleMaterial = new BABYLON.StandardMaterial("material", scene);
   obstacleMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-  obstacleMaterial.specularColor = new BABYLON.Color3(0.5, 0.5, 0.5);
 
   let obstacle = BABYLON.MeshBuilder.CreateBox(
     "obstacle",
-    { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT, depth: 0.5 },
+    { width: defaultWidth, height: defaultHeight, depth: 5 },
     scene
   );
 
-  obstacle.rotate(BABYLON.Axis.X, -(Math.PI / 2));
-  obstacle.setPositionWithLocalVector(new BABYLON.Vector3.Zero());
+  obstacle.setPositionWithLocalVector(new BABYLON.Vector3(0, 0, 250));
   obstacle.material = obstacleMaterial;
 
   let obstacles = [];
 
   for (let i = 0; i < NUMBER_OF_OBSTACLES; i++) {
     let object = obstacle.clone();
-    let height = DEFAULT_HEIGHT;
+    let height = defaultHeight;
 
     const width = Math.floor(Math.random() * 30) + 10;
     const isLow = Math.floor(Math.random() * 2) === 1 ? 1 : -1;
@@ -36,8 +38,8 @@ const Obstacles = (scene, level) => {
       width += 10;
     }
 
-    const scalingHeight = height / DEFAULT_HEIGHT;
-    const scalingWidth = width / DEFAULT_WIDTH;
+    const scalingHeight = height / defaultHeight;
+    const scalingWidth = width / defaultWidth;
 
     object.scaling = new BABYLON.Vector3(scalingWidth, scalingHeight, 1);
 
@@ -46,15 +48,13 @@ const Obstacles = (scene, level) => {
     xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 
     object.setPositionWithLocalVector(
-      new BABYLON.Vector3(xPos, DEFAULT_HEIGHT / 2, i * Z_POS_DIFFERENCE - 200)
+      new BABYLON.Vector3(xPos, height / 2 - 1000, i * Z_POS_DIFFERENCE - 200)
     );
-
-    object.parent = level;
 
     object.physicsImpostor = new BABYLON.PhysicsImpostor(
       object,
       BABYLON.PhysicsImpostor.BoxImpostor,
-      { mass: 0.0 },
+      { mass: 100 },
       scene
     );
 
@@ -62,6 +62,17 @@ const Obstacles = (scene, level) => {
   }
   // remove clone obstacle
   obstacle.dispose();
+
+  // Render Loop
+  scene.registerBeforeRender(() => {
+    obstacles.forEach(ob => {
+      if (ob.position.z < BEHIND_CAMERA_POSITION) {
+        ob.position.z = UPDATE_POSITION;
+      } else {
+        ob.position.z -= DEFAULT_MOVING_SPEED;
+      }
+    });
+  });
 };
 
 export default Obstacles;
