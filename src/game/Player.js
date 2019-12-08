@@ -27,9 +27,11 @@ class Player {
   }
 
   updateTimeAlivePoints() {
-    let currentTime = new Date().getTime();
-    let distance = Math.round((currentTime - this.gameStartTime) / 50);
-    this.timeAlivePoints = distance;
+    if (!this.statuses.DEAD) {
+      let currentTime = new Date().getTime();
+      let distance = Math.round((currentTime - this.gameStartTime) / 50);
+      this.timeAlivePoints = distance;
+    }
   }
 
   setup(scene, setCurrentLevel) {
