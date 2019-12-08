@@ -19,6 +19,24 @@ class Level {
     this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
+  startMusic(scene) {
+    this.inGameMusic = new BABYLON.Sound(
+      "inGameMusic",
+      "./src/sounds/music.mp3",
+      scene,
+      () => {
+        this.inGameMusic.play();
+      },
+      { loop: true }
+    );
+  }
+
+  stopMusic() {
+    if (this.inGameMusic) {
+      this.inGameMusic.stop();
+    }
+  }
+
   setup(scene) {
     // physics engine
     scene.enablePhysics(
