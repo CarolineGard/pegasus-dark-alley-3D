@@ -41,9 +41,12 @@ class Game {
     this.level.startMusic(this.scene);
 
     this.player.setup(this.scene, this.setCurrentGameMode);
-
-    this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
-
+    this.obstacles.setup(
+      this.scene,
+      this.setCurrentGameMode,
+      this.player,
+      this.level
+    );
     this.trees.reset();
     this.trees.setup(this.scene);
 
@@ -58,7 +61,12 @@ class Game {
     this.player.setup(this.scene, this.setCurrentGameMode);
 
     this.obstacles.reset();
-    this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
+    this.obstacles.setup(
+      this.scene,
+      this.setCurrentGameMode,
+      this.player,
+      this.level
+    );
 
     this.trees.reset();
     this.trees.setup(this.scene);
