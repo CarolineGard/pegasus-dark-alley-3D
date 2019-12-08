@@ -3,6 +3,11 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Player {
   constructor() {
+    this.reset = this.reset.bind(this);
+    this.reset();
+  }
+
+  reset() {
     this.player = null;
     this.statuses = {
       RUNNING: true,
@@ -35,8 +40,6 @@ class Player {
   }
 
   setup(scene, setCurrentLevel) {
-    this.statuses.DEAD = false;
-    this.collectedPoints = 0;
     this.gameStartTime = new Date().getTime();
 
     // Add and manipulate meshes in the scene
