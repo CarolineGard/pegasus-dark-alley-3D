@@ -1,37 +1,47 @@
 import * as BABYLON from "@babylonjs/core";
 import { DEFAULT_MOVING_SPEED } from "./constants";
 
-const Coins = (scene, player) => {
-  let coin = BABYLON.MeshBuilder.CreateCylinder(
-    "cone",
-    { diameter: 3, height: 0.3, tessellation: 96 },
-    scene,
-    true
-  );
+class Coins {
+  constructor() {
+    this.coin = null;
+  }
 
-  let coinMaterial = new BABYLON.StandardMaterial("material", scene);
-  coinMaterial.diffuseColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-  coinMaterial.specularColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-  coinMaterial.ambientColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-  coinMaterial.emissiveColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-  coin.material = coinMaterial;
+  reset() {
+    this.coin.dispose();
+  }
 
-  coin.setPositionWithLocalVector(new BABYLON.Vector3(0, -49, 150));
-  coin.rotate(BABYLON.Axis.Z, Math.PI / 2);
+  setup(scene, player) {
+    this.coin = BABYLON.MeshBuilder.CreateCylinder(
+      "coin",
+      { diameter: 3, height: 0.3, tessellation: 96 },
+      scene,
+      true
+    );
 
-  let glowLayer = new BABYLON.GlowLayer("glow", scene);
-  glowLayer.intensity = 0.4;
-  glowLayer.addIncludedOnlyMesh(coin);
+    let coinMaterial = new BABYLON.StandardMaterial("material", scene);
+    coinMaterial.diffuseColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    coinMaterial.specularColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    coinMaterial.ambientColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    coinMaterial.emissiveColor = new BABYLON.Color3(0.95, 0.7, 0.31);
+    this.coin.material = coinMaterial;
 
-  scene.registerBeforeRender(() => {
-    coin.position.z -= DEFAULT_MOVING_SPEED;
-    coin.addRotation(0.01, 0, 0);
+    this.coin.setPositionWithLocalVector(new BABYLON.Vector3(0, -49, 150));
+    this.coin.rotate(BABYLON.Axis.Z, Math.PI / 2);
 
-    if (coin.intersectsMesh(player.getPlayer(), false)) {
-      player.addPoints();
-      coin.dispose();
-    }
-  });
-};
+    let glowLayer = new BABYLON.GlowLayer("glow", scene);
+    glowLayer.intensity = 0.4;
+    glowLayer.addIncludedOnlyMesh(this.coin);
+
+    scene.registerBeforeRender(() => {
+      this.coin.position.z -= DEFAULT_MOVING_SPEED;
+      this.coin.addRotation(0.01, 0, 0);
+
+      if (this.coin.intersectsMesh(player.getPlayer(), false)) {
+        player.addPoints();
+        this.coin.dispose();
+      }
+    });
+  }
+}
 
 export default Coins;

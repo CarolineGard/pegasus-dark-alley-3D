@@ -15,7 +15,9 @@ class Game {
   constructor() {
     this.currentLevel = 0;
     this.levelIsActive = false;
+
     this.startGame = this.startGame.bind(this);
+    this.restartGame = this.restartGame.bind(this);
     this.setCurrentLevel = this.setCurrentLevel.bind(this);
   }
 
@@ -24,38 +26,52 @@ class Game {
     this.currentLevel = nr;
   }
 
-  startGame(scene, level, player, trees, engine) {
+  startGame(scene, level, player, trees, coins, engine) {
     console.log("startGame");
+
+    Hud(scene, player);
+
     level.reset();
+
     player.setup(scene, this.setCurrentLevel);
+
     trees.reset();
     trees.setup(scene);
-    Hud(scene, player);
-    Coins(scene, player);
+    coins.setup(scene, player);
+  }
+
+  restartGame(scene, level, player, trees, coins, engine) {
+    console.log("restartGame");
+
+    level.reset();
+
+    player.setup(scene, this.setCurrentLevel);
+
+    trees.reset();
+    trees.setup(scene);
+
+    coins.reset();
+    coins.setup(scene, player);
   }
 
   /******* Add the create scene function ******/
   CreateScene(engine, canvas) {
     let scene = new BABYLON.Scene(engine);
-
-    // Reduce calls to gl.clear() by disable the default scene clearing behavior
-    // Safe setting since the viewport will always be 100% filled (inside skybox)
-    scene.autoClear = false; // Color buffer
-    scene.autoClearDepthAndStencil = false; // Depth and stencil
-
     let camera = Camera(canvas, scene);
-    scene.activeCamera = camera;
-    Light(scene);
 
-    SkyBox(scene);
     let level = new Level();
     let player = new Player();
     let trees = new Trees();
+    let coins = new Coins();
+
+    Light(scene);
+    SkyBox(scene);
+
     level.setup(scene);
     trees.setup(scene);
 
     SceneEffects(scene);
-    GuiMenu(scene, level, player, trees, engine, this.startGame);
+    GuiMenu(scene, level, player, trees, coins, engine, this.startGame);
 
     scene.registerBeforeRender(() => {
       if (!this.levelIsActive) {
@@ -63,7 +79,15 @@ class Game {
         } else if (this.currentLevel === 1) {
         } else if (this.currentLevel === 2) {
           console.log("gui restart");
-          GuiRestartMenu(scene, level, player, trees, engine, this.startGame);
+          GuiRestartMenu(
+            scene,
+            level,
+            player,
+            trees,
+            coins,
+            engine,
+            this.startGame
+          );
         }
 
         this.levelIsActive = true;

@@ -1,6 +1,14 @@
 import * as GUI from "@babylonjs/gui";
 
-const GuiRestartMenu = (scene, level, player, trees, engine, startGame) => {
+const GuiRestartMenu = (
+  scene,
+  level,
+  player,
+  trees,
+  coins,
+  engine,
+  startGame
+) => {
   let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   let button = GUI.Button.CreateSimpleButton("startButton", "Restart");
   var text = new GUI.TextBlock();
@@ -21,7 +29,7 @@ const GuiRestartMenu = (scene, level, player, trees, engine, startGame) => {
     console.log("onPointerObservable");
     advancedTexture.removeControl(text);
     advancedTexture.removeControl(button);
-    startGame(scene, level, player, trees, engine);
+    startGame(scene, level, player, trees, coins, engine);
   });
   advancedTexture.addControl(text);
   advancedTexture.addControl(button);
