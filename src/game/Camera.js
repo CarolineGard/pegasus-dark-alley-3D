@@ -18,6 +18,8 @@ const Camera = (canvas, scene) => {
 
   camera.maxZ = 2000;
 
+  scene.activeCamera = camera;
+
   // // Lens effects
   // var lensEffect = new BABYLON.LensRenderingPipeline(
   //   "lens",

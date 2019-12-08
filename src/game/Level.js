@@ -18,7 +18,12 @@ class Level {
     this.groundPlane2 = null;
   }
 
-  setup(scene, player) {
+  reset() {
+    this.groundPlane1.position.z = START_POSITION;
+    this.groundPlane2.position.z = UPDATE_POSITION;
+  }
+
+  setup(scene) {
     // physics engine
     scene.enablePhysics(
       new BABYLON.Vector3(0, -9.8, 0),
@@ -33,7 +38,7 @@ class Level {
     this.groundPlane1 = BABYLON.MeshBuilder.CreatePlane(
       "groundPlane1",
       {
-        width: SCENE_LEVEL_WIDTH,
+        width: SCENE_LEVEL_WIDTH / 3,
         height: SCENE_LEVEL_LENGTH
       },
       scene
@@ -83,11 +88,6 @@ class Level {
         this.groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
       }
     });
-  }
-
-  resetLevel() {
-    this.groundPlane1.position.z = START_POSITION;
-    this.groundPlane2.position.z = UPDATE_POSITION;
   }
 }
 

@@ -14,6 +14,18 @@ class Player {
     this.timeAlivePoints = 0;
   }
 
+  reset() {
+    this.player.dispose();
+    this.statuses = {
+      RUNNING: true,
+      JUMPING: false,
+      DEAD: false
+    };
+    this.gameStartTime = null;
+    this.collectedPoints = 0;
+    this.timeAlivePoints = 0;
+  }
+
   getPlayer() {
     return this.player;
   }
@@ -27,17 +39,21 @@ class Player {
   }
 
   updateTimeAlivePoints() {
-    let currentTime = new Date().getTime();
-    let distance = Math.round((currentTime - this.gameStartTime) / 50);
-    this.timeAlivePoints = distance;
+    if (!this.statuses.DEAD) {
+      let currentTime = new Date().getTime();
+      let distance = Math.round((currentTime - this.gameStartTime) / 50);
+      this.timeAlivePoints = distance;
+    }
   }
 
-  setup(scene) {
+  setup(scene, setCurrentLevel) {
     this.gameStartTime = new Date().getTime();
 
     // Add and manipulate meshes in the scene
     this.player = BABYLON.MeshBuilder.CreateSphere(
-      "player",
+      Math.random()
+        .toString(36)
+        .substring(7),
       { diameter: 1 },
       scene
     );
@@ -103,9 +119,9 @@ class Player {
         this.statuses.JUMPING = true;
         this.player.position.y += 0.5;
       }
-      if (this.player.position.y < -70) {
+      if (this.player.position.y < -70 && !this.statuses.DEAD) {
         this.statuses.DEAD = true;
-        location.reload(true);
+        setCurrentLevel(2);
       }
     });
 
@@ -120,7 +136,7 @@ class Player {
       scene
     );
 
-    scene.registerBeforeRender(() => {
+    this.player.registerBeforeRender(() => {
       this.updateTimeAlivePoints();
     });
   }
