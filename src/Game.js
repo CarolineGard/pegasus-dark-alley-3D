@@ -38,16 +38,21 @@ class Game {
     Hud(this.scene, this.player);
 
     this.level.reset();
+    this.level.startMusic(this.scene);
 
     this.player.setup(this.scene, this.setCurrentGameMode);
+
     this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
+
     this.trees.reset();
     this.trees.setup(this.scene);
+
     this.coins.setup(this.scene, this.player);
   }
 
   restartGame() {
     this.level.reset();
+    this.level.startMusic(this.scene);
 
     this.player.reset();
     this.player.setup(this.scene, this.setCurrentGameMode);
@@ -80,6 +85,7 @@ class Game {
         if (this.currentGameMode === 0) {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
+          this.level.stopMusic();
           GuiRestartMenu(this.player, this.restartGame);
         }
 

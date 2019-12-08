@@ -16,11 +16,30 @@ class Level {
   constructor() {
     this.groundPlane1 = null;
     this.groundPlane2 = null;
+    this.music = null;
   }
 
   reset() {
     this.groundPlane1.position.z = START_POSITION;
     this.groundPlane2.position.z = UPDATE_POSITION;
+  }
+
+  startMusic(scene) {
+    this.inGameMusic = new BABYLON.Sound(
+      "inGameMusic",
+      "./src/sounds/music.mp3",
+      scene,
+      () => {
+        this.inGameMusic.play();
+      },
+      { loop: true }
+    );
+  }
+
+  stopMusic() {
+    if (this.inGameMusic) {
+      this.inGameMusic.stop();
+    }
   }
 
   setup(scene) {

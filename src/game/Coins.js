@@ -41,6 +41,14 @@ class Coins {
       this.coin.addRotation(0.01, 0, 0);
 
       if (this.coin.intersectsMesh(player.getPlayer(), false)) {
+        var coinSound = new BABYLON.Sound(
+          "coinSound",
+          "./src/sounds/star.wav",
+          scene,
+          function() {
+            coinSound.play();
+          }
+        );
         player.addPoints();
         this.coin.dispose();
       }
