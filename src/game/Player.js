@@ -104,6 +104,16 @@ class Player {
       )
     );
 
+    let inGameMusic = new BABYLON.Sound(
+      "inGameMusic",
+      "./src/sounds/music.mp3",
+      scene,
+      () => {
+        inGameMusic.play();
+      },
+      { loop: true }
+    );
+
     // Game/Render loop
     scene.onBeforeRenderObservable.add(() => {
       if (inputMap["a"] || inputMap["ArrowLeft"]) {
@@ -121,6 +131,7 @@ class Player {
       }
       if (this.player.position.y < -70 && !this.statuses.DEAD) {
         this.statuses.DEAD = true;
+        inGameMusic.stop();
         setCurrentLevel(2);
       }
     });
