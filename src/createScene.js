@@ -34,10 +34,12 @@ class Game {
     SkyBox(scene);
     let level = new Level();
     let player = new Player();
+    let trees = new Trees();
     level.setup(scene);
+    trees.setup(scene);
+    trees.reset();
 
     SceneEffects(scene);
-    Trees(scene);
     GuiMenu(scene, level, player, this.startGame);
 
     return scene;
