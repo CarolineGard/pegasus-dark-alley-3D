@@ -11,9 +11,11 @@ import Trees from "./game/Trees";
 import Coins from "./game/Coins";
 
 class Game {
-  startGame(scene, level, player) {
+  startGame(scene, level, player, trees) {
     level.resetLevel();
     player.setup(scene);
+    trees.reset();
+    trees.setup(scene);
     Hud(scene, player);
     Coins(scene, player);
   }
@@ -37,10 +39,9 @@ class Game {
     let trees = new Trees();
     level.setup(scene);
     trees.setup(scene);
-    trees.reset();
 
     SceneEffects(scene);
-    GuiMenu(scene, level, player, this.startGame);
+    GuiMenu(scene, level, player, trees, this.startGame);
 
     return scene;
   }
