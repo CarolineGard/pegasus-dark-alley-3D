@@ -16,11 +16,30 @@ class Level {
   constructor() {
     this.groundPlane1 = null;
     this.groundPlane2 = null;
+    this.music = null;
   }
 
   reset() {
     this.groundPlane1.position.z = START_POSITION;
     this.groundPlane2.position.z = UPDATE_POSITION;
+  }
+
+  startMusic(scene) {
+    this.inGameMusic = new BABYLON.Sound(
+      "inGameMusic",
+      "./src/sounds/music.mp3",
+      scene,
+      () => {
+        this.inGameMusic.play();
+      },
+      { loop: true }
+    );
+  }
+
+  stopMusic() {
+    if (this.inGameMusic) {
+      this.inGameMusic.stop();
+    }
   }
 
   setup(scene) {
@@ -46,8 +65,6 @@ class Level {
 
     this.groundPlane1.material = material;
 
-    Obstacles(scene, this.groundPlane1);
-
     this.groundPlane1.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
@@ -58,25 +75,24 @@ class Level {
 
     this.groundPlane2.material = material;
 
-    Obstacles(scene, this.groundPlane2);
-
     this.groundPlane2.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
 
-    this.groundPlane1.physicsImpostor = new BABYLON.PhysicsImpostor(
-      this.groundPlane1,
-      BABYLON.PhysicsImpostor.BoxImpostor,
-      {
-        mass: 0.0,
-        restitution: 0.9
-      },
-      scene
-    );
+    [this.groundPlane1, this.groundPlane2].forEach(ground => {
+      ground.physicsImpostor = new BABYLON.PhysicsImpostor(
+        ground,
+        BABYLON.PhysicsImpostor.BoxImpostor,
+        {
+          mass: 0.0,
+          restitution: 0.9
+        },
+        scene
+      );
+    });
 
     // Render Loop
     scene.registerBeforeRender(() => {
-      // If ground plane is behind camera: Update with new position and create new shader material
       if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane1.position.z = UPDATE_POSITION;
       } else {

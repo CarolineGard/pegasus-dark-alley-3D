@@ -46,7 +46,7 @@ class Player {
     }
   }
 
-  setup(scene, setCurrentLevel) {
+  setup(scene, setCurrentGameMode) {
     this.gameStartTime = new Date().getTime();
 
     // Add and manipulate meshes in the scene
@@ -121,7 +121,7 @@ class Player {
       }
       if (this.player.position.y < -70 && !this.statuses.DEAD) {
         this.statuses.DEAD = true;
-        setCurrentLevel(2);
+        setCurrentGameMode(2);
       }
     });
 
