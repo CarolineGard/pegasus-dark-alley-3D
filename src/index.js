@@ -5,9 +5,8 @@ import Game from "./Game.js";
 let canvas = document.getElementById("renderCanvas"); // Get the canvas element
 let engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
-/******* End of the create scene function ******/
-let game = new Game();
-let scene = game.CreateScene(engine, canvas); //Call the createScene function
+let game = new Game(engine);
+let scene = game.createInitialScene(engine, canvas); //Call the createScene function
 
 // Register a render loop to repeatedly render the scene
 // scene.executeWhenReady(() => {

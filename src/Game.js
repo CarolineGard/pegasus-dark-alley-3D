@@ -12,7 +12,13 @@ import Trees from "./game/Trees";
 import Coins from "./game/Coins";
 
 class Game {
-  constructor() {
+  constructor(engine) {
+    this.scene = null;
+    this.level = new Level();
+    this.player = new Player();
+    this.trees = new Trees();
+    this.coins = new Coins();
+
     this.currentLevel = 0;
     this.levelIsActive = false;
 
@@ -26,75 +32,57 @@ class Game {
     this.currentLevel = nr;
   }
 
-  startGame(scene, level, player, trees, coins, engine) {
-    console.log("startGame");
+  startGame() {
+    Hud(this.scene, this.player);
 
-    Hud(scene, player);
+    this.level.reset();
 
-    level.reset();
+    this.player.setup(this.scene, this.setCurrentLevel);
 
-    player.setup(scene, this.setCurrentLevel);
-
-    trees.reset();
-    trees.setup(scene);
-    coins.setup(scene, player);
+    this.trees.reset();
+    this.trees.setup(this.scene);
+    this.coins.setup(this.scene, this.player);
   }
 
-  restartGame(scene, level, player, trees, coins, engine) {
-    console.log("restartGame");
+  restartGame() {
+    this.level.reset();
 
-    level.reset();
+    this.player.reset();
+    this.player.setup(this.scene, this.setCurrentLevel);
 
-    player.setup(scene, this.setCurrentLevel);
+    this.trees.reset();
+    this.trees.setup(this.scene);
 
-    trees.reset();
-    trees.setup(scene);
-
-    coins.reset();
-    coins.setup(scene, player);
+    this.coins.reset();
+    this.coins.setup(this.scene, this.player);
   }
 
-  /******* Add the create scene function ******/
-  CreateScene(engine, canvas) {
-    let scene = new BABYLON.Scene(engine);
-    let camera = Camera(canvas, scene);
+  createInitialScene(engine, canvas) {
+    this.scene = new BABYLON.Scene(engine);
+    let camera = Camera(canvas, this.scene);
 
-    let level = new Level();
-    let player = new Player();
-    let trees = new Trees();
-    let coins = new Coins();
+    Light(this.scene);
+    SkyBox(this.scene);
 
-    Light(scene);
-    SkyBox(scene);
+    this.level.setup(this.scene);
+    this.trees.setup(this.scene);
 
-    level.setup(scene);
-    trees.setup(scene);
+    SceneEffects(this.scene);
+    GuiMenu(this.startGame);
 
-    SceneEffects(scene);
-    GuiMenu(scene, level, player, trees, coins, engine, this.startGame);
-
-    scene.registerBeforeRender(() => {
+    this.scene.registerBeforeRender(() => {
       if (!this.levelIsActive) {
         if (this.currentLevel === 0) {
         } else if (this.currentLevel === 1) {
         } else if (this.currentLevel === 2) {
-          console.log("gui restart");
-          GuiRestartMenu(
-            scene,
-            level,
-            player,
-            trees,
-            coins,
-            engine,
-            this.startGame
-          );
+          GuiRestartMenu(this.player, this.restartGame);
         }
 
         this.levelIsActive = true;
       }
     });
 
-    return scene;
+    return this.scene;
   }
 }
 

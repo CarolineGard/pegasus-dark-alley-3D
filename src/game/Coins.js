@@ -7,12 +7,16 @@ class Coins {
   }
 
   reset() {
-    this.coin.dispose();
+    if (this.coin) {
+      this.coin.dispose();
+    }
   }
 
   setup(scene, player) {
     this.coin = BABYLON.MeshBuilder.CreateCylinder(
-      "coin",
+      Math.random()
+        .toString(36)
+        .substring(7),
       { diameter: 3, height: 0.3, tessellation: 96 },
       scene,
       true
@@ -32,7 +36,7 @@ class Coins {
     glowLayer.intensity = 0.4;
     glowLayer.addIncludedOnlyMesh(this.coin);
 
-    scene.registerBeforeRender(() => {
+    this.coin.registerBeforeRender(() => {
       this.coin.position.z -= DEFAULT_MOVING_SPEED;
       this.coin.addRotation(0.01, 0, 0);
 

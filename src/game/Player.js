@@ -3,12 +3,19 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Player {
   constructor() {
-    this.reset = this.reset.bind(this);
-    this.reset();
+    this.player = null;
+    this.statuses = {
+      RUNNING: true,
+      JUMPING: false,
+      DEAD: false
+    };
+    this.gameStartTime = null;
+    this.collectedPoints = 0;
+    this.timeAlivePoints = 0;
   }
 
   reset() {
-    this.player = null;
+    this.player.dispose();
     this.statuses = {
       RUNNING: true,
       JUMPING: false,
@@ -44,7 +51,9 @@ class Player {
 
     // Add and manipulate meshes in the scene
     this.player = BABYLON.MeshBuilder.CreateSphere(
-      "player",
+      Math.random()
+        .toString(36)
+        .substring(7),
       { diameter: 1 },
       scene
     );
@@ -127,7 +136,7 @@ class Player {
       scene
     );
 
-    scene.registerBeforeRender(() => {
+    this.player.registerBeforeRender(() => {
       this.updateTimeAlivePoints();
     });
   }
