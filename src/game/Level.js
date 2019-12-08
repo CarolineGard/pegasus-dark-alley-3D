@@ -18,6 +18,11 @@ class Level {
     this.groundPlane2 = null;
   }
 
+  reset() {
+    this.groundPlane1.position.z = START_POSITION;
+    this.groundPlane2.position.z = UPDATE_POSITION;
+  }
+
   setup(scene) {
     // physics engine
     scene.enablePhysics(
@@ -84,11 +89,6 @@ class Level {
         this.groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
       }
     });
-  }
-
-  resetLevel() {
-    this.groundPlane1.position.z = START_POSITION;
-    this.groundPlane2.position.z = UPDATE_POSITION;
   }
 }
 

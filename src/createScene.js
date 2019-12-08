@@ -26,7 +26,7 @@ class Game {
 
   startGame(scene, level, player, trees, engine) {
     console.log("startGame");
-    level.resetLevel();
+    level.reset();
     player.setup(scene, this.setCurrentLevel);
     trees.reset();
     trees.setup(scene);
