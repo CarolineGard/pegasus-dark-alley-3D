@@ -60,8 +60,6 @@ class Level {
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
 
-    Obstacles(scene);
-
     [this.groundPlane1, this.groundPlane2].forEach(ground => {
       ground.physicsImpostor = new BABYLON.PhysicsImpostor(
         ground,
