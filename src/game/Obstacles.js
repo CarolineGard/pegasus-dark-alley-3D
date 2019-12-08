@@ -1,13 +1,13 @@
 import * as BABYLON from "@babylonjs/core";
 
-import { SCENE_LEVEL_LENGTH, DEFAULT_MOVING_SPEED } from "./constants";
+import { SCENE_LEVEL_LENGTH } from "./constants";
 
 class Obstacles {
   constructor() {
     this.obstacles = [];
   }
 
-  setup(scene, setCurrentGameMode, player) {
+  setup(scene, setCurrentGameMode, player, level) {
     const NUMBER_OF_OBSTACLES = 10;
     const Z_POS_DIFFERENCE = SCENE_LEVEL_LENGTH / NUMBER_OF_OBSTACLES;
     const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
@@ -71,7 +71,7 @@ class Obstacles {
         if (object.position.z < BEHIND_CAMERA_POSITION) {
           object.position.z = UPDATE_POSITION;
         } else {
-          object.position.z -= DEFAULT_MOVING_SPEED;
+          object.position.z -= level.movingSpeed;
         }
       });
 

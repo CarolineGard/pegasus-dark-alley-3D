@@ -3,10 +3,10 @@ import * as cannon from "cannon";
 
 import {
   DEFAULT_MOVING_SPEED,
+  INCREASE_SPEED,
   SCENE_LEVEL_LENGTH,
   SCENE_LEVEL_WIDTH
 } from "./constants";
-import Obstacles from "./Obstacles";
 
 const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
 const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
@@ -16,11 +16,7 @@ class Level {
   constructor() {
     this.groundPlane1 = null;
     this.groundPlane2 = null;
-  }
-
-  reset() {
-    this.groundPlane1.position.z = START_POSITION;
-    this.groundPlane2.position.z = UPDATE_POSITION;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   setup(scene) {
@@ -74,18 +70,26 @@ class Level {
 
     // Render Loop
     scene.registerBeforeRender(() => {
+      this.movingSpeed += INCREASE_SPEED;
+
       if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane1.position.z = UPDATE_POSITION;
       } else {
-        this.groundPlane1.position.z -= DEFAULT_MOVING_SPEED;
+        this.groundPlane1.position.z -= this.movingSpeed;
       }
 
       if (this.groundPlane2.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane2.position.z = UPDATE_POSITION;
       } else {
-        this.groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
+        this.groundPlane2.position.z -= this.movingSpeed;
       }
     });
+  }
+
+  reset() {
+    this.groundPlane1.position.z = START_POSITION;
+    this.groundPlane2.position.z = UPDATE_POSITION;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 }
 

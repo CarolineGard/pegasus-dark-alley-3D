@@ -40,7 +40,12 @@ class Game {
     this.level.reset();
 
     this.player.setup(this.scene, this.setCurrentGameMode);
-    this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
+    this.obstacles.setup(
+      this.scene,
+      this.setCurrentGameMode,
+      this.player,
+      this.level
+    );
     this.trees.reset();
     this.trees.setup(this.scene);
     this.coins.setup(this.scene, this.player);
@@ -53,7 +58,12 @@ class Game {
     this.player.setup(this.scene, this.setCurrentGameMode);
 
     this.obstacles.reset();
-    this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
+    this.obstacles.setup(
+      this.scene,
+      this.setCurrentGameMode,
+      this.player,
+      this.level
+    );
 
     this.trees.reset();
     this.trees.setup(this.scene);
