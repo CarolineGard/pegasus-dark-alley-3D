@@ -1,12 +1,15 @@
 import * as BABYLON from "@babylonjs/core";
 import { DEFAULT_MOVING_SPEED } from "./constants";
 
+const NEXT_ATTACK_WAIT_TIME = 3000;
+
 class Player {
   constructor() {
     this.player = null;
     this.statuses = {
       RUNNING: true,
       JUMPING: false,
+      ATTACK: false,
       DEAD: false
     };
     this.gameStartTime = null;
@@ -44,6 +47,45 @@ class Player {
       let distance = Math.round((currentTime - this.gameStartTime) / 50);
       this.timeAlivePoints = distance;
     }
+  }
+
+  doAttack(scene) {
+    this.statuses.ATTACK = true;
+
+    let attackSound = new BABYLON.Sound(
+      "attackSound",
+      "./src/sounds/attack.wav",
+      scene,
+      function() {
+        attackSound.play();
+      }
+    );
+
+    let animationTorus = new BABYLON.Animation(
+      "torusEasingAnimation",
+      "position",
+      30,
+      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    let nextPos = this.player.position.add(new BABYLON.Vector3(0, 0, 100));
+
+    let keysTorus = [];
+    keysTorus.push({ frame: 0, value: this.player.position });
+    keysTorus.push({ frame: 30, value: nextPos });
+    animationTorus.setKeys(keysTorus);
+
+    let easingFunction = new BABYLON.CircleEase();
+    easingFunction.setEasingMode(BABYLON.EasingFunction.EASEOUT);
+    animationTorus.setEasingFunction(easingFunction);
+    this.player.animations.push(animationTorus);
+
+    scene.beginAnimation(this.player, 0, 30, false);
+
+    setTimeout(() => {
+      this.statuses.ATTACK = false;
+    }, NEXT_ATTACK_WAIT_TIME);
   }
 
   setup(scene, setCurrentGameMode) {
@@ -118,6 +160,9 @@ class Player {
       if (inputMap["z"] && this.player.position.y < 5) {
         this.statuses.JUMPING = true;
         this.player.position.y += 0.5;
+      }
+      if (inputMap["x"] && !this.statuses.DEAD && !this.statuses.ATTACK) {
+        this.doAttack(scene);
       }
       if (this.player.position.y < -70 && !this.statuses.DEAD) {
         this.statuses.DEAD = true;
