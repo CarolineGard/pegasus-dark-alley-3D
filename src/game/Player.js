@@ -29,6 +29,10 @@ class Player {
     this.timeAlivePoints = 0;
   }
 
+  isAttacking() {
+    return this.statuses.ATTACK;
+  }
+
   getPlayer() {
     return this.player;
   }
