@@ -168,8 +168,6 @@ class Game {
     SceneEffects(this.scene);
     GuiMenu(this.startGame);
 
-    //let scene = this.scene;
-
     this.scene.registerBeforeRender(() => {
       if (!this.levelIsActive) {
         if (this.currentGameMode === 0) {
@@ -190,13 +188,7 @@ class Game {
       });
     });
 
-    this.assetsManager.addMesh(
-      this.scene,
-      this.player,
-      "skull",
-      "star2.babylon"
-    );
-
+    this.assetsManager.addAllAssets();
     this.assetsManager.load();
   }
 }

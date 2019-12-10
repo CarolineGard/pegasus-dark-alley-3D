@@ -10,7 +10,11 @@ class AssetsManager {
     };
   }
 
-  addMesh(scene, player, name, fileName) {
+  addAllAssets() {
+    this.addMesh("skull", "star2.babylon");
+  }
+
+  addMesh(name, fileName) {
     var meshTask = this.assetsManager.addMeshTask(
       name,
       "",
