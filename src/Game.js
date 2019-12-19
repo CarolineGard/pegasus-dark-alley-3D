@@ -90,7 +90,7 @@ class Game {
     this.coins.reset();
     this.coins.setup(this.scene, this.player);
 
-    this.stars.reset();
+    this.stars.reEnable();
   }
 
   createInitialScene(engine, canvas) {
