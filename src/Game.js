@@ -14,8 +14,6 @@ import Trees from "./game/Trees";
 import Stars from "./game/Stars";
 import AssetsManager from "./game/AssetsManager";
 
-import { DEFAULT_MOVING_SPEED } from "./game/constants";
-
 class Game {
   constructor(engine) {
     this.engine = null;
