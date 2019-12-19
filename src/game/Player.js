@@ -37,8 +37,8 @@ class Player {
     return this.player;
   }
 
-  addPoints() {
-    this.collectedPoints += 100;
+  addPoints(points = 100) {
+    this.collectedPoints += points;
   }
 
   getPoints() {

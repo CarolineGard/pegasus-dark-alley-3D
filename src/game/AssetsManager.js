@@ -11,7 +11,7 @@ class AssetsManager {
   }
 
   addAllAssets() {
-    this.addMesh("skull", "star2.babylon");
+    this.addMesh("star", "star.babylon");
   }
 
   addMesh(name, fileName) {
@@ -25,12 +25,10 @@ class AssetsManager {
     meshTask.onSuccess = task => {
       task.loadedMeshes[0].setEnabled(false);
       this.meshes = { ...this.meshes, [name]: task.loadedMeshes[0] };
-      console.log("m", this.meshes);
     };
   }
 
   getMesh(name) {
-    console.log(this.meshes);
     return this.meshes[name];
   }
 
