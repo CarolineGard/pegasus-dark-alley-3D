@@ -11,15 +11,20 @@ import Player from "./game/Player";
 import SceneEffects from "./game/SceneEffects";
 import SkyBox from "./game/Skybox";
 import Trees from "./game/Trees";
+import Stars from "./game/Stars";
+import AssetsManager from "./game/AssetsManager";
 
 class Game {
   constructor(engine) {
+    this.engine = null;
     this.scene = null;
     this.level = new Level();
     this.player = new Player();
     this.obstacles = new Obstacles();
     this.trees = new Trees();
     this.coins = new Coins();
+    this.stars = new Stars();
+    this.assetsManager = null;
 
     this.currentGameMode = 0;
     this.levelIsActive = false;
@@ -41,16 +46,25 @@ class Game {
     this.level.startMusic(this.scene);
 
     this.player.setup(this.scene, this.setCurrentGameMode);
+
     this.obstacles.setup(
       this.scene,
       this.setCurrentGameMode,
       this.player,
       this.level
     );
+
     this.trees.reset();
     this.trees.setup(this.scene);
 
     this.coins.setup(this.scene, this.player);
+
+    this.stars.setup(
+      this.scene,
+      this.player,
+      this.assetsManager,
+      this.setCurrentGameMode
+    );
   }
 
   restartGame() {
@@ -73,9 +87,12 @@ class Game {
 
     this.coins.reset();
     this.coins.setup(this.scene, this.player);
+
+    this.stars.reEnable();
   }
 
   createInitialScene(engine, canvas) {
+    this.engine = engine;
     this.scene = new BABYLON.Scene(engine);
     Camera(canvas, this.scene);
 
@@ -101,7 +118,15 @@ class Game {
       }
     });
 
-    return this.scene;
+    const scene = this.scene;
+    this.assetsManager = new AssetsManager(this.scene, () => {
+      engine.runRenderLoop(function() {
+        scene.render();
+      });
+    });
+
+    this.assetsManager.addAllAssets();
+    this.assetsManager.load();
   }
 }
 

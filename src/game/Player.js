@@ -29,12 +29,16 @@ class Player {
     this.timeAlivePoints = 0;
   }
 
+  isAttacking() {
+    return this.statuses.ATTACK;
+  }
+
   getPlayer() {
     return this.player;
   }
 
-  addPoints() {
-    this.collectedPoints += 100;
+  addPoints(points = 100) {
+    this.collectedPoints += points;
   }
 
   getPoints() {
