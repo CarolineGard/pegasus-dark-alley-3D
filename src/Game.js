@@ -36,7 +36,6 @@ class Game {
   }
 
   setCurrentGameMode(gameMode) {
-    this.levelIsActive = false;
     this.currentGameMode = gameMode;
   }
 
@@ -69,6 +68,9 @@ class Game {
   }
 
   restartGame() {
+    this.levelIsActive = false;
+    this.setCurrentGameMode(0);
+
     this.level.reset();
     this.level.startMusic(this.scene);
 
@@ -108,15 +110,25 @@ class Game {
     DevFpsMeter(this.scene, this.engine);
 
     this.scene.registerBeforeRender(() => {
+      console.log(this.levelIsActive);
       if (!this.levelIsActive) {
         if (this.currentGameMode === 0) {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
           this.level.stopMusic();
+          console.log("DIE", this.levelIsActive);
+          var coinSound = new BABYLON.Sound(
+            "coinSound",
+            "./src/sounds/die.mp3",
+            scene,
+            function() {
+              coinSound.play();
+            }
+          );
           GuiRestartMenu(this.player, this.restartGame);
-        }
 
-        this.levelIsActive = true;
+          this.levelIsActive = true;
+        }
       }
     });
 
