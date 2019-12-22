@@ -29,6 +29,10 @@ class Player {
     this.timeAlivePoints = 0;
   }
 
+  setDeadStatus(status) {
+    this.statuses.DEAD = status;
+  }
+
   isAttacking() {
     return this.statuses.ATTACK;
   }

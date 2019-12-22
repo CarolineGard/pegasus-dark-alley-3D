@@ -63,6 +63,7 @@ class Stars {
           player.addPoints(1000);
           this.hideStar();
         } else {
+          player.setDeadStatus(true);
           setCurrentGameMode(2);
         }
       }

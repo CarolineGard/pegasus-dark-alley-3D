@@ -28,7 +28,7 @@ class Game {
     this.assetsManager = null;
 
     this.currentGameMode = 0;
-    this.levelIsActive = false;
+    this.waitingForPlayerRestart = false;
 
     this.startGame = this.startGame.bind(this);
     this.restartGame = this.restartGame.bind(this);
@@ -68,7 +68,8 @@ class Game {
   }
 
   restartGame() {
-    this.levelIsActive = false;
+    this.waitingForPlayerRestart = false;
+    this.player.setDeadStatus(false);
     this.setCurrentGameMode(0);
 
     this.level.reset();
@@ -110,24 +111,22 @@ class Game {
     DevFpsMeter(this.scene, this.engine);
 
     this.scene.registerBeforeRender(() => {
-      console.log(this.levelIsActive);
-      if (!this.levelIsActive) {
+      if (!this.waitingForPlayerRestart) {
         if (this.currentGameMode === 0) {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
           this.level.stopMusic();
-          console.log("DIE", this.levelIsActive);
-          var coinSound = new BABYLON.Sound(
-            "coinSound",
+          var dieSound = new BABYLON.Sound(
+            "dieSound",
             "./src/sounds/die.mp3",
             scene,
             function() {
-              coinSound.play();
+              dieSound.play();
             }
           );
           GuiRestartMenu(this.player, this.restartGame);
 
-          this.levelIsActive = true;
+          this.waitingForPlayerRestart = true;
         }
       }
     });
