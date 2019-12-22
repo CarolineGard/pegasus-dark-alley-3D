@@ -1,7 +1,7 @@
 import * as GUI from "@babylonjs/gui";
 
 const GuiMenu = startGame => {
-  let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+  let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("MenuUi");
 
   let background = new GUI.Rectangle();
   background.width = "800px";
