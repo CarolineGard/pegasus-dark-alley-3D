@@ -27,17 +27,7 @@ class Obstacles {
     let obstacleMaterial = new BABYLON.StandardMaterial("material", scene);
     obstacleMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
 
-    let obstacle = BABYLON.MeshBuilder.CreateBox(
-      "obstacle",
-      { width: defaultWidth, height: defaultHeight, depth: 7 },
-      scene
-    );
-
-    obstacle.setPositionWithLocalVector(new BABYLON.Vector3(0, 0, 250));
-    obstacle.material = obstacleMaterial;
-
     for (let i = 0; i < NUMBER_OF_OBSTACLES; i++) {
-      let object = obstacle.clone();
       let height = defaultHeight;
 
       const width = Math.floor(Math.random() * 30) + 10;
@@ -48,43 +38,43 @@ class Obstacles {
         width += 10;
       }
 
-      const scalingHeight = height / defaultHeight;
-      const scalingWidth = width / defaultWidth;
-
-      object.scaling = new BABYLON.Vector3(scalingWidth, scalingHeight, 1);
+      let obstacle = BABYLON.MeshBuilder.CreateBox(
+        `obstacle${i}`,
+        { width: width, height: height, depth: 7 },
+        scene
+      );
+      obstacle.material = obstacleMaterial;
 
       // generate random number between -30 and 30 for x position
       const xPos = Math.floor(Math.random() * (30 - width / 2));
       xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 
-      object.setPositionWithLocalVector(
-        new BABYLON.Vector3(xPos, height / 2 - 1000, i * Z_POS_DIFFERENCE - 200)
+      obstacle.setPositionWithLocalVector(
+        new BABYLON.Vector3(xPos, height / 2 - 40, i * Z_POS_DIFFERENCE + 200)
       );
 
-      object.physicsImpostor = new BABYLON.PhysicsImpostor(
-        object,
+      obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(
+        obstacle,
         BABYLON.PhysicsImpostor.BoxImpostor,
         { mass: 100 },
         scene
       );
 
-      object.registerBeforeRender(() => {
-        if (object.intersectsMesh(player.getPlayer(), false)) {
+      obstacle.registerBeforeRender(() => {
+        if (obstacle.intersectsMesh(player.getPlayer(), false)) {
           player.setDeadStatus(true);
           setCurrentGameMode(2); // reset game
         }
 
-        if (object.position.z < BEHIND_CAMERA_POSITION) {
-          object.position.z = UPDATE_POSITION;
+        if (obstacle.position.z < BEHIND_CAMERA_POSITION) {
+          obstacle.position.z = UPDATE_POSITION;
         } else {
-          object.position.z -= this.movingSpeed;
+          obstacle.position.z -= this.movingSpeed;
         }
       });
 
-      this.obstacles.push(object);
+      this.obstacles.push(obstacle);
     }
-    // remove clone obstacle
-    obstacle.dispose();
   }
 
   reset() {
