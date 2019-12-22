@@ -37,6 +37,10 @@ class Level {
     }
   }
 
+  setMovingSpeed(updatedSpeed) {
+    this.movingSpeed = updatedSpeed;
+  }
+
   setup(scene) {
     // physics engine
     scene.enablePhysics(
@@ -106,8 +110,6 @@ class Level {
 
     // Render Loop
     scene.registerBeforeRender(() => {
-      this.movingSpeed += INCREASE_SPEED;
-
       if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION) {
         this.groundPlane1.position.z = UPDATE_POSITION;
       } else {
@@ -125,7 +127,6 @@ class Level {
   reset() {
     this.groundPlane1.position.z = START_POSITION;
     this.groundPlane2.position.z = UPDATE_POSITION;
-    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 }
 
