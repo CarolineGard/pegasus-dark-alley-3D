@@ -4,12 +4,17 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 class Coins {
   constructor() {
     this.coin = null;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   reset() {
     if (this.coin) {
       this.coin.dispose();
     }
+  }
+
+  setMovingSpeed(updatedSpeed) {
+    this.movingSpeed = updatedSpeed;
   }
 
   setup(scene, player) {
@@ -37,7 +42,8 @@ class Coins {
     glowLayer.addIncludedOnlyMesh(this.coin);
 
     this.coin.registerBeforeRender(() => {
-      this.coin.position.z -= DEFAULT_MOVING_SPEED;
+      this.coin.position.z -= this.movingSpeed;
+
       this.coin.addRotation(0.01, 0, 0);
 
       if (this.coin.intersectsMesh(player.getPlayer(), false)) {

@@ -15,6 +15,7 @@ class Player {
     this.gameStartTime = null;
     this.collectedPoints = 0;
     this.timeAlivePoints = 0;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   reset() {

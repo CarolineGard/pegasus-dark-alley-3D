@@ -4,6 +4,7 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 class Stars {
   constructor() {
     this.star = null;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   reEnable() {
@@ -18,6 +19,10 @@ class Stars {
 
   hideStar() {
     this.star.setEnabled(false);
+  }
+
+  setMovingSpeed(updatedSpeed) {
+    this.movingSpeed = updatedSpeed;
   }
 
   setup(scene, player, assetsManager, setCurrentGameMode) {
@@ -48,7 +53,7 @@ class Stars {
     );
 
     scene.registerBeforeRender(() => {
-      this.star.position.z -= DEFAULT_MOVING_SPEED;
+      this.star.position.z -= this.movingSpeed;
 
       if (this.star.intersectsMesh(player.getPlayer(), false)) {
         if (player.isAttacking()) {

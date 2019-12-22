@@ -9,6 +9,10 @@ class Trees {
     this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
+  setMovingSpeed(updatedSpeed) {
+    this.movingSpeed = updatedSpeed;
+  }
+
   setup(scene) {
     this.leftTrees = [];
     this.rightTrees = [];
@@ -51,10 +55,6 @@ class Trees {
       this.leftTrees.push(treeLeft);
       this.rightTrees.push(treeRight);
     }
-
-    scene.registerBeforeRender(() => {
-      this.movingSpeed += INCREASE_SPEED;
-    });
 
     // remove clone tree
     tree.dispose();
