@@ -20,7 +20,7 @@ const Camera = (canvas, scene) => {
 
   scene.activeCamera = camera;
 
-  // // Lens effects
+  // Lens effects
   // var lensEffect = new BABYLON.LensRenderingPipeline(
   //   "lens",
   //   {
@@ -39,8 +39,24 @@ const Camera = (canvas, scene) => {
   //   1.0,
   //   camera
   // );
-
-  // let camera = new BABYLON.ArcRotateCamera("arcCamera", 0, 0, 0, BABYLON.Vector3.Zero(), this.scene);
+  var lensEffect = new BABYLON.LensRenderingPipeline(
+    "lens",
+    {
+      edge_blur: 0.0,
+      chromatic_aberration: 0.2,
+      distortion: 0.2,
+      dof_focus_distance: 40,
+      dof_aperture: 1.0, // tilt-shift effect
+      grain_amount: 1.0,
+      dof_pentagon: true,
+      dof_gain: 3.0,
+      dof_threshold: 5.0,
+      dof_darken: 0.4
+    },
+    scene,
+    1.0,
+    camera
+  );
 
   camera.attachControl(canvas, true);
 
