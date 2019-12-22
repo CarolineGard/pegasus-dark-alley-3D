@@ -117,14 +117,14 @@ class Game {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
           this.level.stopMusic();
-          // var dieSound = new BABYLON.Sound(
-          //   "dieSound",
-          //   "./src/sounds/die.mp3",
-          //   scene,
-          //   function() {
-          //     dieSound.play();
-          //   }
-          // );
+          var dieSound = new BABYLON.Sound(
+            "dieSound",
+            "./src/sounds/die.mp3",
+            scene,
+            function() {
+              dieSound.play();
+            }
+          );
           GuiRestartMenu(this.player, this.restartGame);
 
           this.waitingForPlayerRestart = true;
