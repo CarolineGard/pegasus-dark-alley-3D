@@ -10,7 +10,7 @@ import {
 
 const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
 const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
-const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH;
+const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH - 5;
 
 class Level {
   constructor() {
@@ -44,32 +44,52 @@ class Level {
       new BABYLON.CannonJSPlugin(true, 10, cannon)
     );
 
-    let material = new BABYLON.StandardMaterial("material", scene);
-    material.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    material.alpha = 1.0;
+    var planeShaderMaterial = new BABYLON.ShaderMaterial(
+      "shader",
+      scene,
+      "groundLevel",
+      {
+        attributes: ["position", "normal", "uv"],
+        uniforms: [
+          "world",
+          "worldView",
+          "worldViewProjection",
+          "view",
+          "projection"
+        ]
+      }
+    );
 
     // Start ground
-    this.groundPlane1 = BABYLON.MeshBuilder.CreatePlane(
+    this.groundPlane1 = BABYLON.MeshBuilder.CreateGround(
       "groundPlane1",
       {
-        width: SCENE_LEVEL_WIDTH / 3,
-        height: SCENE_LEVEL_LENGTH
+        width: SCENE_LEVEL_WIDTH,
+        height: SCENE_LEVEL_LENGTH,
+        updatable: true,
+        subdivisions: 1000
       },
       scene
     );
 
-    this.groundPlane1.material = material;
-
+    this.groundPlane1.material = planeShaderMaterial;
     this.groundPlane1.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
-    this.groundPlane1.rotate(BABYLON.Axis.X, Math.PI / 2);
 
     // Second ground
-    this.groundPlane2 = this.groundPlane1.clone("groundPlane2");
+    this.groundPlane2 = BABYLON.MeshBuilder.CreateGround(
+      "groundPlane2",
+      {
+        width: SCENE_LEVEL_WIDTH,
+        height: SCENE_LEVEL_LENGTH,
+        updatable: true,
+        subdivisions: 1000
+      },
+      scene
+    );
 
-    this.groundPlane2.material = material;
-
+    this.groundPlane2.material = planeShaderMaterial;
     this.groundPlane2.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, UPDATE_POSITION)
     );
