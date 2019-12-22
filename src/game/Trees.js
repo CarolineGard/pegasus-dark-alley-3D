@@ -1,11 +1,12 @@
 import * as BABYLON from "@babylonjs/core";
 
-import { DEFAULT_MOVING_SPEED } from "./constants";
+import { DEFAULT_MOVING_SPEED, INCREASE_SPEED } from "./constants";
 
 class Trees {
   constructor() {
     this.leftTrees = [];
     this.rightTrees = [];
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   setup(scene) {
@@ -35,7 +36,7 @@ class Trees {
       );
       treeLeft.width = width;
       treeLeft.registerBeforeRender(() => {
-        treeLeft.position.z -= DEFAULT_MOVING_SPEED;
+        treeLeft.position.z -= this.movingSpeed;
       });
 
       let treeRight = tree.clone();
@@ -44,12 +45,16 @@ class Trees {
       );
       treeRight.width = width;
       treeRight.registerBeforeRender(() => {
-        treeRight.position.z -= DEFAULT_MOVING_SPEED;
+        treeRight.position.z -= this.movingSpeed;
       });
 
       this.leftTrees.push(treeLeft);
       this.rightTrees.push(treeRight);
     }
+
+    scene.registerBeforeRender(() => {
+      this.movingSpeed += INCREASE_SPEED;
+    });
 
     // remove clone tree
     tree.dispose();

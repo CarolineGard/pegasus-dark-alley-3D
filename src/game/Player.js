@@ -150,20 +150,22 @@ class Player {
       )
     );
 
+    let radians = 0;
+
     // Game/Render loop
     scene.onBeforeRenderObservable.add(() => {
       if (inputMap["a"] || inputMap["ArrowLeft"]) {
-        this.player.position.x -= 0.2;
+        this.player.position.x -= 0.4;
       }
       if (inputMap["s"] || inputMap["ArrowDown"]) {
         this.player.position.z -= 0.2;
       }
       if (inputMap["d"] || inputMap["ArrowRight"]) {
-        this.player.position.x += 0.2;
+        this.player.position.x += 0.4;
       }
       if (inputMap["z"] && this.player.position.y < 5) {
         this.statuses.JUMPING = true;
-        this.player.position.y += 0.5;
+        this.player.position.y += 0.4;
       }
       if (inputMap["x"] && !this.statuses.DEAD && !this.statuses.ATTACK) {
         this.doAttack(scene);
@@ -172,13 +174,22 @@ class Player {
         this.statuses.DEAD = true;
         setCurrentGameMode(2);
       }
+      //else {
+      //   // Default animation
+      //   radians += 0.05;
+
+      //   if (radians >= 360) {
+      //     radians = 0;
+      //   }
+      //   this.player.position.y += Math.abs(Math.sin(radians) * 0.5;
+      // }
     });
 
     this.player.physicsImpostor = new BABYLON.PhysicsImpostor(
       this.player,
       BABYLON.PhysicsImpostor.SphereImpostor,
       {
-        mass: 1.0,
+        mass: 100.0,
         friction: 0.3,
         restitution: 0.3
       },
