@@ -65,6 +65,7 @@ class Obstacles {
 
       object.registerBeforeRender(() => {
         if (object.intersectsMesh(player.getPlayer(), false)) {
+          player.setDeadStatus(true);
           setCurrentGameMode(2); // reset game
         }
 

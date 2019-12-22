@@ -28,7 +28,7 @@ class Game {
     this.assetsManager = null;
 
     this.currentGameMode = 0;
-    this.levelIsActive = false;
+    this.waitingForPlayerRestart = false;
 
     this.startGame = this.startGame.bind(this);
     this.restartGame = this.restartGame.bind(this);
@@ -36,7 +36,6 @@ class Game {
   }
 
   setCurrentGameMode(gameMode) {
-    this.levelIsActive = false;
     this.currentGameMode = gameMode;
   }
 
@@ -69,6 +68,10 @@ class Game {
   }
 
   restartGame() {
+    this.waitingForPlayerRestart = false;
+    this.player.setDeadStatus(false);
+    this.setCurrentGameMode(0);
+
     this.level.reset();
     this.level.startMusic(this.scene);
 
@@ -108,15 +111,23 @@ class Game {
     DevFpsMeter(this.scene, this.engine);
 
     this.scene.registerBeforeRender(() => {
-      if (!this.levelIsActive) {
+      if (!this.waitingForPlayerRestart) {
         if (this.currentGameMode === 0) {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
           this.level.stopMusic();
+          var dieSound = new BABYLON.Sound(
+            "dieSound",
+            "./src/sounds/die.mp3",
+            scene,
+            function() {
+              dieSound.play();
+            }
+          );
           GuiRestartMenu(this.player, this.restartGame);
-        }
 
-        this.levelIsActive = true;
+          this.waitingForPlayerRestart = true;
+        }
       }
     });
 
