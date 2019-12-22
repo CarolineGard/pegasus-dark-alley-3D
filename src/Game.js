@@ -4,6 +4,7 @@ import Coins from "./game/Coins";
 import GuiMenu from "./game/GuiMenu";
 import GuiRestartMenu from "./game/GuiRestartMenu";
 import Hud from "./game/Hud";
+import DevFpsMeter from "./game/DevFpsMeter";
 import Level from "./game/Level";
 import Light from "./game/Light";
 import Obstacles from "./game/Obstacles";
@@ -104,6 +105,7 @@ class Game {
 
     SceneEffects(this.scene);
     GuiMenu(this.startGame);
+    DevFpsMeter(this.scene, this.engine);
 
     this.scene.registerBeforeRender(() => {
       if (!this.levelIsActive) {
