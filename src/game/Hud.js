@@ -1,7 +1,7 @@
 import * as GUI from "@babylonjs/gui";
 
 const Hud = (scene, player) => {
-  let advancedTexture = Hud.CreateFullscreenUI("HudUi");
+  let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("HudUi");
 
   let pointsText = new GUI.TextBlock();
   pointsText.text = player.getPoints().toString();
