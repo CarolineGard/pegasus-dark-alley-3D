@@ -52,6 +52,14 @@ class Stars {
 
       if (this.star.intersectsMesh(player.getPlayer(), false)) {
         if (player.isAttacking()) {
+          var starCrushSound = new BABYLON.Sound(
+            "starCrushSound",
+            "./src/sounds/crush.mp3",
+            scene,
+            function() {
+              starCrushSound.play();
+            }
+          );
           player.addPoints(1000);
           this.hideStar();
         } else {
