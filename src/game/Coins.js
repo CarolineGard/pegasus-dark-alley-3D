@@ -43,7 +43,7 @@ class Coins {
       if (this.coin.intersectsMesh(player.getPlayer(), false)) {
         var coinSound = new BABYLON.Sound(
           "coinSound",
-          "./src/sounds/star.wav",
+          "./src/sounds/coin.wav",
           scene,
           function() {
             coinSound.play();
