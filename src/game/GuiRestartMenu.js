@@ -10,7 +10,9 @@ const QUOTES = [
 ];
 
 const GuiRestartMenu = (player, startGame) => {
-  let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+  let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI(
+    "RestartUi"
+  );
 
   let background = new GUI.Rectangle();
   background.width = "800px";
