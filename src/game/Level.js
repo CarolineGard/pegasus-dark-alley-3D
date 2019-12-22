@@ -66,8 +66,7 @@ class Level {
       {
         width: SCENE_LEVEL_WIDTH,
         height: SCENE_LEVEL_LENGTH,
-        updatable: true,
-        subdivisions: 1000
+        subdivisions: 200
       },
       scene
     );
@@ -83,8 +82,7 @@ class Level {
       {
         width: SCENE_LEVEL_WIDTH,
         height: SCENE_LEVEL_LENGTH,
-        updatable: true,
-        subdivisions: 1000
+        subdivisions: 200
       },
       scene
     );
