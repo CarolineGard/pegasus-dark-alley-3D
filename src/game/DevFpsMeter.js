@@ -8,10 +8,9 @@ const DevFpsMeter = (scene, engine) => {
   let fpsText = new GUI.TextBlock();
   fpsText.color = "grey";
   fpsText.fontSize = 24;
-  fpsText.left = "-40px";
-  fpsText.top = "50px";
-  fpsText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-  fpsText.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+  fpsText.top = "-200px";
+  fpsText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+  fpsText.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
   advancedTexture.addControl(fpsText);
 

@@ -42,9 +42,9 @@ const Camera = (canvas, scene) => {
   var lensEffect = new BABYLON.LensRenderingPipeline(
     "lens",
     {
-      edge_blur: 0.0,
-      chromatic_aberration: 0.2,
-      distortion: 0.2,
+      edge_blur: 4.0,
+      chromatic_aberration: 2.0,
+      distortion: 0.8,
       dof_focus_distance: 40,
       dof_aperture: 1.0, // tilt-shift effect
       grain_amount: 1.0,

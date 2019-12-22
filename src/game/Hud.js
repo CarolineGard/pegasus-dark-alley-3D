@@ -7,10 +7,9 @@ const Hud = (scene, player) => {
   pointsText.text = player.getPoints().toString();
   pointsText.color = "grey";
   pointsText.fontSize = 24;
-  pointsText.left = "-40px";
-  pointsText.top = "20px";
-  pointsText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-  pointsText.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+  pointsText.top = "-160px";
+  pointsText.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+  pointsText.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
   advancedTexture.addControl(pointsText);
 
