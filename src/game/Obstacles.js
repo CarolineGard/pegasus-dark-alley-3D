@@ -13,11 +13,13 @@ class Obstacles {
   }
 
   setup(scene, setCurrentGameMode, player) {
-    const NUMBER_OF_OBSTACLES = 10;
-    const Z_POS_DIFFERENCE = SCENE_LEVEL_LENGTH / NUMBER_OF_OBSTACLES;
+    const NUMBER_OF_OBSTACLES = 20;
+    const Z_POS_DIFFERENCE = (SCENE_LEVEL_LENGTH * 2) / NUMBER_OF_OBSTACLES;
+    //const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
     const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
-    const START_POSITION = SCENE_LEVEL_LENGTH / 2 - 150;
-    const UPDATE_POSITION = START_POSITION + SCENE_LEVEL_LENGTH;
+    const START_POSITION = (SCENE_LEVEL_LENGTH * 2) / 2 - 150;
+    const UPDATE_POSITION =
+      START_POSITION + SCENE_LEVEL_LENGTH / 2 + SCENE_LEVEL_LENGTH;
 
     this.obstacles = [];
 
@@ -60,13 +62,16 @@ class Obstacles {
         scene
       );
 
-      obstacle.registerBeforeRender(() => {
+      scene.registerBeforeRender(() => {
         if (obstacle.intersectsMesh(player.getPlayer(), false)) {
           player.setDeadStatus(true);
           setCurrentGameMode(2); // reset game
         }
 
+        // console.log("zPos", obstacle.position.z);
+        // console.log("BEHIND_CAMERA_POSITION", BEHIND_CAMERA_POSITION);
         if (obstacle.position.z < BEHIND_CAMERA_POSITION) {
+          console.log("inside");
           obstacle.position.z = UPDATE_POSITION;
         } else {
           obstacle.position.z -= this.movingSpeed;
