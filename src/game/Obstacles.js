@@ -16,15 +16,12 @@ class Obstacles {
     const NUMBER_OF_OBSTACLES = 20;
     const Z_POS_DIFFERENCE = (SCENE_LEVEL_LENGTH * 2) / NUMBER_OF_OBSTACLES;
     //const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
-    const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
-    const START_POSITION = (SCENE_LEVEL_LENGTH * 2) / 2 - 150;
-    const UPDATE_POSITION =
-      START_POSITION + SCENE_LEVEL_LENGTH / 2 + SCENE_LEVEL_LENGTH;
+    const BEHIND_CAMERA_POSITION = -150;
+    const UPDATE_POSITION = SCENE_LEVEL_LENGTH;
 
     this.obstacles = [];
 
     let defaultHeight = 200;
-    let defaultWidth = 10;
 
     let obstacleMaterial = new BABYLON.StandardMaterial("material", scene);
     obstacleMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -52,7 +49,7 @@ class Obstacles {
       xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 
       obstacle.setPositionWithLocalVector(
-        new BABYLON.Vector3(xPos, height / 2 - 40, i * Z_POS_DIFFERENCE + 200)
+        new BABYLON.Vector3(xPos, height / 2 - 43, i * Z_POS_DIFFERENCE + 200)
       );
 
       obstacle.physicsImpostor = new BABYLON.PhysicsImpostor(
@@ -68,8 +65,6 @@ class Obstacles {
           setCurrentGameMode(2); // reset game
         }
 
-        // console.log("zPos", obstacle.position.z);
-        // console.log("BEHIND_CAMERA_POSITION", BEHIND_CAMERA_POSITION);
         if (obstacle.position.z < BEHIND_CAMERA_POSITION) {
           console.log("inside");
           obstacle.position.z = UPDATE_POSITION;

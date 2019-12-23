@@ -105,11 +105,11 @@ class Player {
       Math.random()
         .toString(36)
         .substring(7),
-      { diameter: 1 },
+      { diameter: 1.5 },
       scene
     );
 
-    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -4, -60));
+    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -10, -60));
     scene.activeCamera.lockedTarget = this.player;
 
     let material = new BABYLON.StandardMaterial("material", scene);
