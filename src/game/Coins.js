@@ -40,10 +40,9 @@ class Coins {
 
       let xPos = Math.floor(Math.random() * (40 - 1.5 / 2));
       xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+      let zPos = (i + 1) * 200 + 50;
 
-      coin.setPositionWithLocalVector(
-        new BABYLON.Vector3(xPos, -49, (i + 1) * 150)
-      );
+      coin.setPositionWithLocalVector(new BABYLON.Vector3(xPos, -49, zPos));
       coin.rotate(BABYLON.Axis.Z, Math.PI / 2);
 
       glowLayer.addIncludedOnlyMesh(coin);
