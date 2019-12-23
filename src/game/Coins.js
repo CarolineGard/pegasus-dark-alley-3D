@@ -3,13 +3,13 @@ import { DEFAULT_MOVING_SPEED } from "./constants";
 
 class Coins {
   constructor() {
-    this.coin = null;
+    this.coins = [];
     this.movingSpeed = DEFAULT_MOVING_SPEED;
   }
 
   reset() {
-    if (this.coin) {
-      this.coin.dispose();
+    if (this.coins) {
+      this.coins.forEach(coin => coin.dispose());
     }
   }
 
@@ -18,46 +18,61 @@ class Coins {
   }
 
   setup(scene, player) {
-    this.coin = BABYLON.MeshBuilder.CreateCylinder(
-      Math.random()
-        .toString(36)
-        .substring(7),
-      { diameter: 3, height: 0.3, tessellation: 96 },
-      scene,
-      true
-    );
+    const NUMBER_OF_COINS = 20;
 
     let coinMaterial = new BABYLON.StandardMaterial("material", scene);
     coinMaterial.diffuseColor = new BABYLON.Color3(0.95, 0.7, 0.31);
     coinMaterial.specularColor = new BABYLON.Color3(0.95, 0.7, 0.31);
     coinMaterial.ambientColor = new BABYLON.Color3(0.95, 0.7, 0.31);
     coinMaterial.emissiveColor = new BABYLON.Color3(0.95, 0.7, 0.31);
-    this.coin.material = coinMaterial;
-
-    this.coin.setPositionWithLocalVector(new BABYLON.Vector3(0, -49, 150));
-    this.coin.rotate(BABYLON.Axis.Z, Math.PI / 2);
 
     let glowLayer = new BABYLON.GlowLayer("glow", scene);
     glowLayer.intensity = 0.4;
-    glowLayer.addIncludedOnlyMesh(this.coin);
 
-    this.coin.registerBeforeRender(() => {
-      this.coin.position.z -= this.movingSpeed;
+    for (let i = 0; i < NUMBER_OF_COINS; i++) {
+      let coin = BABYLON.MeshBuilder.CreateCylinder(
+        `coin${i}`,
+        { diameter: 3, height: 0.3, tessellation: 96 },
+        scene,
+        true
+      );
+      coin.material = coinMaterial;
 
-      this.coin.addRotation(0.01, 0, 0);
+      let xPos = Math.floor(Math.random() * (40 - 1.5 / 2));
+      xPos *= Math.floor(Math.random() * 2) === 1 ? 1 : -1;
 
-      if (this.coin.intersectsMesh(player.getPlayer(), false)) {
-        var coinSound = new BABYLON.Sound(
-          "coinSound",
-          "./src/sounds/coin.wav",
-          scene,
-          function() {
-            coinSound.play();
-          }
-        );
-        player.addPoints();
-        this.coin.dispose();
-      }
+      coin.setPositionWithLocalVector(
+        new BABYLON.Vector3(xPos, -49, (i + 1) * 150)
+      );
+      coin.rotate(BABYLON.Axis.Z, Math.PI / 2);
+
+      glowLayer.addIncludedOnlyMesh(coin);
+
+      this.coins.push(coin);
+    }
+
+    this.coins.forEach(coin => {
+      scene.registerBeforeRender(() => {
+        coin.addRotation(0.01, 0, 0);
+
+        coin.position.z -= this.movingSpeed;
+
+        if (
+          coin.intersectsMesh(player.getPlayer(), false) &&
+          coin.isEnabled() === true
+        ) {
+          var coinSound = new BABYLON.Sound(
+            "coinSound",
+            "./src/sounds/coin.wav",
+            scene,
+            function() {
+              coinSound.play();
+            }
+          );
+          player.addPoints();
+          coin.setEnabled(false);
+        }
+      });
     });
   }
 }
