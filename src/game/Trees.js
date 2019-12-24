@@ -1,6 +1,10 @@
 import * as BABYLON from "@babylonjs/core";
 
-import { DEFAULT_MOVING_SPEED, INCREASE_SPEED } from "./constants";
+import {
+  BEHIND_CAMERA_POSITION,
+  DEFAULT_MOVING_SPEED,
+  SCENE_LEVEL_LENGTH
+} from "./constants";
 
 class Trees {
   constructor() {
@@ -14,45 +18,65 @@ class Trees {
   }
 
   setup(scene) {
+    const UPDATE_POSITION = SCENE_LEVEL_LENGTH;
     this.leftTrees = [];
     this.rightTrees = [];
 
     let treeMaterial = new BABYLON.StandardMaterial("material", scene);
     treeMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    treeMaterial.disableLighting = true;
 
     // we want to randomly genereate trees with varying width(todo)
     // with a z position along the scene with varying positions between -25 and -35 in x
     for (let i = 0; i < 100; i++) {
       const xPos = Math.floor(Math.random() * 45) + 35;
-      const width = Math.floor(Math.random() * 6) + 3;
+      const width = Math.floor(Math.random() * 5) + 2;
 
-      let treeLeft = BABYLON.MeshBuilder.CreatePlane(
+      let treeLeft = BABYLON.MeshBuilder.CreateCylinder(
         "treeLeft",
-        { width: width, height: 250 },
+        {
+          diameterTop: width,
+          diameterBottom: width,
+          height: 250,
+          subdivisions: 10
+        },
         scene
       );
-      treeLeft.material = treeMaterial;
 
-      let treeRight = BABYLON.MeshBuilder.CreatePlane(
+      let treeRight = BABYLON.MeshBuilder.CreateCylinder(
         "treeRight",
-        { width: width, height: 250 },
+        {
+          diameterTop: width,
+          diameterBottom: width,
+          height: 250,
+          subdivisions: 10
+        },
         scene
       );
+
+      treeLeft.material = treeMaterial;
       treeRight.material = treeMaterial;
 
       treeLeft.setPositionWithLocalVector(
         new BABYLON.Vector3(-xPos, 5, i * 15)
       );
 
-      treeLeft.registerBeforeRender(() => {
-        treeLeft.position.z -= this.movingSpeed;
-      });
-
       treeRight.setPositionWithLocalVector(
         new BABYLON.Vector3(xPos, 5, i * 15)
       );
-      treeRight.registerBeforeRender(() => {
-        treeRight.position.z -= this.movingSpeed;
+
+      scene.registerBeforeRender(() => {
+        if (treeLeft.position.z < BEHIND_CAMERA_POSITION) {
+          treeLeft.position.z = UPDATE_POSITION;
+        } else {
+          treeLeft.position.z -= this.movingSpeed;
+        }
+
+        if (treeRight.position.z < BEHIND_CAMERA_POSITION) {
+          treeRight.position.z = UPDATE_POSITION;
+        } else {
+          treeRight.position.z -= this.movingSpeed;
+        }
       });
 
       this.leftTrees.push(treeLeft);
