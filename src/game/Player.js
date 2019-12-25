@@ -168,9 +168,9 @@ class Player {
       if (inputMap["d"] || inputMap["ArrowRight"]) {
         this.player.position.x += 0.4;
       }
-      if (inputMap["z"] && this.player.position.y < 5) {
+      if (inputMap["z"] && this.player.position.y < 4) {
         this.statuses.JUMPING = true;
-        this.player.position.y += 0.4;
+        this.player.position.y += 0.5;
       }
       if (inputMap["x"] && !this.statuses.DEAD && !this.statuses.ATTACK) {
         this.doAttack(scene);
