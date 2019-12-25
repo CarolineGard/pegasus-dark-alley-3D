@@ -12,6 +12,7 @@ class AssetsManager {
 
   addAllAssets() {
     this.addMesh("star", "star.babylon");
+    this.addMesh("pegasus", "pegasus2.babylon");
   }
 
   addMesh(name, fileName) {

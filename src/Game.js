@@ -49,7 +49,7 @@ class Game {
     this.level.reset();
     this.level.startMusic(this.scene);
 
-    this.player.setup(this.scene, this.setCurrentGameMode);
+    this.player.setup(this.scene, this.setCurrentGameMode, this.assetsManager);
 
     this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);
 
@@ -79,7 +79,7 @@ class Game {
     this.level.startMusic(this.scene);
 
     this.player.reset();
-    this.player.setup(this.scene, this.setCurrentGameMode);
+    this.player.setup(this.scene, this.setCurrentGameMode, this.assetsManager);
 
     this.obstacles.reset();
     this.obstacles.setup(this.scene, this.setCurrentGameMode, this.player);

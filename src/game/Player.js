@@ -100,33 +100,55 @@ class Player {
     }, NEXT_ATTACK_WAIT_TIME);
   }
 
-  setup(scene, setCurrentGameMode) {
+  setup(scene, setCurrentGameMode, assetsManager) {
     this.gameStartTime = new Date().getTime();
 
-    // Add and manipulate meshes in the scene
-    this.player = BABYLON.MeshBuilder.CreateSphere(
-      Math.random()
-        .toString(36)
-        .substring(7),
-      { diameter: 1.5 },
-      scene
-    );
+    // Pegasus
+    this.player = assetsManager.getMesh("pegasus");
 
-    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -10, -60));
+    let glowLayer2 = new BABYLON.GlowLayer("glow", scene);
+    glowLayer2.intensity = 0.5;
+    glowLayer2.addIncludedOnlyMesh(this.player);
+
+    this.player.setEnabled(true);
+
+    this.player.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
+    this.player.rotate(BABYLON.Axis.Y, Math.PI);
+    //this.player.rotate(BABYLON.Axis.X, Math.PI / 6);
+    this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -300, 1000));
+
+    // meshC.parent = meshP;
+    // meshC.setParent(meshP);
+    // meshP.addChild(meshC);
+
+    // Add and manipulate meshes in the scene
+    // this.player = BABYLON.MeshBuilder.CreateSphere(
+    //   Math.random()
+    //     .toString(36)
+    //     .substring(7),
+    //   { diameter: 1.5 },
+    //   scene
+    // );
+
+    // pegasus.parent = this.player;
+    // pegasus.setParent(this.player);
+    // this.player.addChild(pegasus);
+
+    // this.player.setPositionWithLocalVector(new BABYLON.Vector3(0, -10, -60));
     scene.activeCamera.lockedTarget = this.player;
 
-    let material = new BABYLON.StandardMaterial("material", scene);
-    material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
-    material.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
-    material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
-    material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
-    material.alpha = 0.9;
+    // let material = new BABYLON.StandardMaterial("material", scene);
+    // material.diffuseColor = new BABYLON.Color3(1, 0.56, 0.7);
+    // material.specularColor = new BABYLON.Color3(0.5, 0.6, 0.87);
+    // material.emissiveColor = new BABYLON.Color3(0.5, 0.5, 1);
+    // material.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+    // material.alpha = 0.9;
 
-    this.player.material = material;
+    // this.player.material = material;
 
-    let glowLayer = new BABYLON.GlowLayer("glow", scene);
-    glowLayer.intensity = 0.4;
-    glowLayer.addIncludedOnlyMesh(this.player);
+    // let glowLayer = new BABYLON.GlowLayer("glow", scene);
+    // glowLayer.intensity = 0.4;
+    // glowLayer.addIncludedOnlyMesh(this.player);
 
     new BABYLON.SpotLight(
       "playerLight",
@@ -203,7 +225,7 @@ class Player {
 
     this.player.physicsImpostor = new BABYLON.PhysicsImpostor(
       this.player,
-      BABYLON.PhysicsImpostor.SphereImpostor,
+      BABYLON.PhysicsImpostor.MeshImpostor,
       {
         mass: 100.0,
         friction: 0.3,

@@ -41,6 +41,9 @@ class Stars {
   }
 
   setup(scene, player, assetsManager, setCurrentGameMode) {
+    let glowLayer = new BABYLON.GlowLayer("glow", scene);
+    glowLayer.intensity = 0.5;
+
     let sampleStar = assetsManager.getMesh("star");
 
     let coinMaterial = new BABYLON.StandardMaterial("material", scene);
@@ -50,8 +53,6 @@ class Stars {
     coinMaterial.emissiveColor = new BABYLON.Color3(0.58, 0.39, 0.63);
     sampleStar.material = coinMaterial;
 
-    let glowLayer = new BABYLON.GlowLayer("glow", scene);
-    glowLayer.intensity = 0.5;
     glowLayer.addIncludedOnlyMesh(sampleStar);
 
     sampleStar.setEnabled(true);
