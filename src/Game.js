@@ -10,6 +10,7 @@ import Hud from "./game/Hud";
 import Level from "./game/Level";
 import Light from "./game/Light";
 import Obstacles from "./game/Obstacles";
+import Particles from "./game/Particles";
 import Player from "./game/Player";
 import SceneEffects from "./game/SceneEffects";
 import SkyBox from "./game/Skybox";
@@ -18,15 +19,16 @@ import Trees from "./game/Trees";
 
 class Game {
   constructor(engine) {
-    this.engine = null;
-    this.scene = null;
-    this.level = new Level();
-    this.player = new Player();
-    this.obstacles = new Obstacles();
-    this.trees = new Trees();
-    this.coins = new Coins();
-    this.stars = new Stars();
     this.assetsManager = null;
+    this.coins = new Coins();
+    this.engine = null;
+    this.level = new Level();
+    this.obstacles = new Obstacles();
+    this.particles = new Particles();
+    this.player = new Player();
+    this.scene = null;
+    this.stars = new Stars();
+    this.trees = new Trees();
 
     this.movingSpeed = DEFAULT_MOVING_SPEED;
     this.currentGameMode = 0;
@@ -53,6 +55,9 @@ class Game {
 
     this.trees.reset();
     this.trees.setup(this.scene);
+
+    this.particles.reset();
+    this.particles.setup(this.scene);
 
     this.coins.setup(this.scene, this.player);
 
@@ -81,6 +86,9 @@ class Game {
 
     this.trees.reset();
     this.trees.setup(this.scene);
+
+    this.particles.reset();
+    this.particles.setup(this.scene);
 
     this.coins.reset();
     this.coins.setup(this.scene, this.player);
@@ -111,6 +119,7 @@ class Game {
       this.trees.setMovingSpeed(this.movingSpeed);
       this.coins.setMovingSpeed(this.movingSpeed);
       this.stars.setMovingSpeed(this.movingSpeed);
+      this.particles.setMovingSpeed(this.movingSpeed);
 
       if (!this.waitingForPlayerRestart) {
         if (this.currentGameMode === 0) {
