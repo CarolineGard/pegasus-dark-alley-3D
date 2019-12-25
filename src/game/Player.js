@@ -23,6 +23,7 @@ class Player {
     this.statuses = {
       RUNNING: true,
       JUMPING: false,
+      ATTACK: false,
       DEAD: false
     };
     this.gameStartTime = null;
@@ -56,40 +57,6 @@ class Player {
       let distance = Math.round((currentTime - this.gameStartTime) / 50);
       this.timeAlivePoints = distance;
     }
-  }
-
-  doJump(scene) {
-    this.statuses.JUMPING = true;
-
-    let animationJump = new BABYLON.Animation(
-      "jumpEasingAnimation",
-      "position",
-      20,
-      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-    );
-
-    let topPosition = this.player.position.add(new BABYLON.Vector3(0, 15, 0));
-    let endPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 0));
-
-    let keysJump = [];
-    keysJump.push({ frame: 0, value: this.player.position });
-    keysJump.push({ frame: 3, value: topPosition });
-    keysJump.push({ frame: 20, value: endPosition });
-    animationJump.setKeys(keysJump);
-
-    let easingFunction = new BABYLON.CircleEase();
-    easingFunction.setEasingMode(BABYLON.EasingFunction.EASEOUT);
-    animationJump.setEasingFunction(easingFunction);
-    this.player.animations.push(animationJump);
-    this.player.animations.push(animationJump);
-    this.player.animations.push(animationJump);
-
-    scene.beginAnimation(this.player, 0, 20, false);
-
-    setTimeout(() => {
-      this.statuses.JUMP = false;
-    }, NEXT_ATTACK_WAIT_TIME);
   }
 
   doAttack(scene) {
@@ -204,10 +171,27 @@ class Player {
       if (inputMap["d"] || inputMap["ArrowRight"]) {
         this.player.position.x += 0.4;
       }
-      if (inputMap["z"] && this.player.position.y < 3) {
-        this.doJump(scene);
+      if (
+        inputMap["z"] &&
+        !this.statuses.JUMPING &&
+        this.player.position.y <= -49.0
+      ) {
+        this.statuses.JUMPING = true;
       }
+      if (this.statuses.JUMPING) {
+        this.player.position.y += Math.sin(radians) * 1.0;
 
+        if (radians > Math.PI / 2.0) {
+          radians += 0.3;
+        } else {
+          radians += 0.15;
+        }
+
+        if (radians > Math.PI) {
+          radians = 0;
+          this.statuses.JUMPING = false;
+        }
+      }
       if (inputMap["x"] && !this.statuses.DEAD && !this.statuses.ATTACK) {
         this.doAttack(scene);
       }
@@ -215,15 +199,6 @@ class Player {
         this.statuses.DEAD = true;
         setCurrentGameMode(2);
       }
-      //else {
-      //   // Default animation
-      //   radians += 0.05;
-
-      //   if (radians >= 360) {
-      //     radians = 0;
-      //   }
-      //   this.player.position.y += Math.abs(Math.sin(radians) * 0.5;
-      // }
     });
 
     this.player.physicsImpostor = new BABYLON.PhysicsImpostor(
