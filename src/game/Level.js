@@ -3,7 +3,6 @@ import * as cannon from "cannon";
 
 import {
   DEFAULT_MOVING_SPEED,
-  INCREASE_SPEED,
   SCENE_LEVEL_LENGTH,
   SCENE_LEVEL_WIDTH
 } from "./constants";
@@ -44,7 +43,7 @@ class Level {
   setup(scene) {
     // physics engine
     scene.enablePhysics(
-      new BABYLON.Vector3(0, -19.8, 0),
+      new BABYLON.Vector3(0, -9.8, 0),
       new BABYLON.CannonJSPlugin(true, 10, cannon)
     );
 

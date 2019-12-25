@@ -1,7 +1,7 @@
 import * as BABYLON from "@babylonjs/core";
 import { DEFAULT_MOVING_SPEED } from "./constants";
 
-const NEXT_ATTACK_WAIT_TIME = 3000;
+const NEXT_ATTACK_WAIT_TIME = 1500;
 
 class Player {
   constructor() {
@@ -58,6 +58,40 @@ class Player {
     }
   }
 
+  doJump(scene) {
+    this.statuses.JUMPING = true;
+
+    let animationJump = new BABYLON.Animation(
+      "jumpEasingAnimation",
+      "position",
+      20,
+      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+    );
+
+    let topPosition = this.player.position.add(new BABYLON.Vector3(0, 15, 0));
+    let endPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 0));
+
+    let keysJump = [];
+    keysJump.push({ frame: 0, value: this.player.position });
+    keysJump.push({ frame: 3, value: topPosition });
+    keysJump.push({ frame: 20, value: endPosition });
+    animationJump.setKeys(keysJump);
+
+    let easingFunction = new BABYLON.CircleEase();
+    easingFunction.setEasingMode(BABYLON.EasingFunction.EASEOUT);
+    animationJump.setEasingFunction(easingFunction);
+    this.player.animations.push(animationJump);
+    this.player.animations.push(animationJump);
+    this.player.animations.push(animationJump);
+
+    scene.beginAnimation(this.player, 0, 20, false);
+
+    setTimeout(() => {
+      this.statuses.JUMP = false;
+    }, NEXT_ATTACK_WAIT_TIME);
+  }
+
   doAttack(scene) {
     this.statuses.ATTACK = true;
 
@@ -70,25 +104,27 @@ class Player {
       }
     );
 
-    let animationTorus = new BABYLON.Animation(
-      "torusEasingAnimation",
+    let animationAttack = new BABYLON.Animation(
+      "attackEasingAnimation",
       "position",
       30,
       BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
       BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
     );
 
-    let nextPos = this.player.position.add(new BABYLON.Vector3(0, 0, 100));
+    let firstPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 50));
+    let endPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 0));
 
-    let keysTorus = [];
-    keysTorus.push({ frame: 0, value: this.player.position });
-    keysTorus.push({ frame: 30, value: nextPos });
-    animationTorus.setKeys(keysTorus);
+    let keysAttack = [];
+    keysAttack.push({ frame: 0, value: this.player.position });
+    keysAttack.push({ frame: 20, value: firstPosition });
+    keysAttack.push({ frame: 30, value: endPosition });
+    animationAttack.setKeys(keysAttack);
 
     let easingFunction = new BABYLON.CircleEase();
     easingFunction.setEasingMode(BABYLON.EasingFunction.EASEOUT);
-    animationTorus.setEasingFunction(easingFunction);
-    this.player.animations.push(animationTorus);
+    animationAttack.setEasingFunction(easingFunction);
+    this.player.animations.push(animationAttack);
 
     scene.beginAnimation(this.player, 0, 30, false);
 
@@ -168,10 +204,10 @@ class Player {
       if (inputMap["d"] || inputMap["ArrowRight"]) {
         this.player.position.x += 0.4;
       }
-      if (inputMap["z"] && this.player.position.y < 4) {
-        this.statuses.JUMPING = true;
-        this.player.position.y += 0.5;
+      if (inputMap["z"] && this.player.position.y < 3) {
+        this.doJump(scene);
       }
+
       if (inputMap["x"] && !this.statuses.DEAD && !this.statuses.ATTACK) {
         this.doAttack(scene);
       }
