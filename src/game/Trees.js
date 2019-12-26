@@ -28,9 +28,9 @@ class Trees {
 
     // we want to randomly genereate trees with varying width(todo)
     // with a z position along the scene with varying positions between -25 and -35 in x
-    for (let i = 0; i < 100; i++) {
-      const xPos = Math.floor(Math.random() * 45) + 35;
-      const width = Math.floor(Math.random() * 5) + 2;
+    for (let i = 0; i < 250; i++) {
+      const xPos = Math.floor(Math.random() * 100) + 38;
+      const width = Math.floor(Math.random() * 7) + 2;
 
       let treeLeft = BABYLON.MeshBuilder.CreateCylinder(
         "treeLeft",
@@ -57,13 +57,9 @@ class Trees {
       treeLeft.material = treeMaterial;
       treeRight.material = treeMaterial;
 
-      treeLeft.setPositionWithLocalVector(
-        new BABYLON.Vector3(-xPos, 5, i * 15)
-      );
+      treeLeft.setPositionWithLocalVector(new BABYLON.Vector3(-xPos, 5, i * 5));
 
-      treeRight.setPositionWithLocalVector(
-        new BABYLON.Vector3(xPos, 5, i * 15)
-      );
+      treeRight.setPositionWithLocalVector(new BABYLON.Vector3(xPos, 5, i * 5));
 
       scene.registerBeforeRender(() => {
         if (treeLeft.position.z < BEHIND_CAMERA_POSITION) {

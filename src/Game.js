@@ -46,6 +46,8 @@ class Game {
   startGame() {
     Hud(this.scene, this.player);
 
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
+
     this.level.reset();
     this.level.startMusic(this.scene);
 

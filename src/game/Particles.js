@@ -1,6 +1,6 @@
 import * as BABYLON from "@babylonjs/core";
 
-const DEFAULT_PARTICLE_UPDATE_SPEED = 0.001;
+const DEFAULT_PARTICLE_UPDATE_SPEED = 0.006;
 
 class Particles {
   constructor() {
@@ -40,7 +40,7 @@ class Particles {
     this.particleSystem.maxLifeTime = 1.5;
 
     // Emission rate
-    this.particleSystem.emitRate = 2000;
+    this.particleSystem.emitRate = 1000;
     const direction1 = new BABYLON.Vector3(0, 0, 0);
     const direction2 = new BABYLON.Vector3(0, 0, -100);
     const minEmitBox = new BABYLON.Vector3(-125, -35, -2.5);
@@ -55,7 +55,7 @@ class Particles {
     );
 
     // Speed
-    this.particleSystem.minEmitPower = 10;
+    this.particleSystem.minEmitPower = 6;
     this.particleSystem.maxEmitPower = 6;
     this.particleSystem.updateSpeed = this.particleSpeed;
 

@@ -80,12 +80,10 @@ class Player {
     );
 
     let firstPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 50));
-    let endPosition = this.player.position.add(new BABYLON.Vector3(0, 0, 0));
 
     let keysAttack = [];
     keysAttack.push({ frame: 0, value: this.player.position });
     keysAttack.push({ frame: 20, value: firstPosition });
-    keysAttack.push({ frame: 30, value: endPosition });
     animationAttack.setKeys(keysAttack);
 
     let easingFunction = new BABYLON.CircleEase();
@@ -125,7 +123,7 @@ class Player {
     this.player.material = material;
 
     let glowLayer = new BABYLON.GlowLayer("glow", scene);
-    glowLayer.intensity = 0.4;
+    glowLayer.intensity = 0.2;
     glowLayer.addIncludedOnlyMesh(this.player);
 
     new BABYLON.SpotLight(
@@ -133,7 +131,7 @@ class Player {
       new BABYLON.Vector3(0, -4, -60),
       new BABYLON.Vector3(0, 0, 10),
       Math.PI / 3,
-      2,
+      1,
       scene
     );
 
@@ -162,31 +160,32 @@ class Player {
 
     // Game/Render loop
     scene.onBeforeRenderObservable.add(() => {
-      if (inputMap["a"] || inputMap["ArrowLeft"]) {
+      if (
+        (inputMap["a"] || inputMap["ArrowLeft"]) &&
+        this.player.position.x > -35
+      ) {
         this.player.position.x -= 0.4;
       }
-      if (inputMap["s"] || inputMap["ArrowDown"]) {
-        this.player.position.z -= 0.2;
-      }
-      if (inputMap["d"] || inputMap["ArrowRight"]) {
+      if (
+        (inputMap["d"] || inputMap["ArrowRight"]) &&
+        this.player.position.x < 35
+      ) {
         this.player.position.x += 0.4;
       }
       if (
         inputMap["z"] &&
         !this.statuses.JUMPING &&
-        this.player.position.y <= -49.0
+        this.player.position.y <= -48.0
       ) {
         this.statuses.JUMPING = true;
       }
       if (this.statuses.JUMPING) {
-        this.player.position.y += Math.sin(radians) * 1.0;
-
-        if (radians > Math.PI / 2.0) {
+        this.player.position.y += Math.sin(radians) * 1.3;
+        if (radians > Math.PI / 2.0 && radians <= Math.PI) {
           radians += 0.3;
         } else {
-          radians += 0.15;
+          radians += 0.35;
         }
-
         if (radians > Math.PI) {
           radians = 0;
           this.statuses.JUMPING = false;
