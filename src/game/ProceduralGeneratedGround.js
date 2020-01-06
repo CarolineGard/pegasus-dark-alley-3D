@@ -1,5 +1,4 @@
 import * as BABYLON from "@babylonjs/core";
-import * as cannon from "cannon";
 import { DEFAULT_MOVING_SPEED, SCENE_LEVEL_LENGTH } from "./constants";
 
 const BEHIND_CAMERA_POSITION = -SCENE_LEVEL_LENGTH / 2 - 200;
@@ -43,18 +42,21 @@ let updateMeshMaterial = mesh => {
 };
 
 class ProceduralGeneratedPlane {
-  setup(scene) {
-    // physics engine
-    scene.enablePhysics(
-      new BABYLON.Vector3(0, -9.8, 0),
-      new BABYLON.CannonJSPlugin(true, 10, cannon)
-    );
+  constructor() {
+    this.groundPlane1 = null;
+    this.movingSpeed = DEFAULT_MOVING_SPEED;
+  }
 
+  setMovingSpeed(updatedSpeed) {
+    this.movingSpeed = updatedSpeed;
+  }
+
+  setup(scene) {
     // Start ground
-    let groundPlane1 = BABYLON.MeshBuilder.CreateGround(
+    this.groundPlane1 = BABYLON.MeshBuilder.CreateGround(
       "groundPlane1",
       {
-        width: 80,
+        width: 120,
         height: SCENE_LEVEL_LENGTH,
         updatable: true,
         subdivisions: 500
@@ -62,52 +64,22 @@ class ProceduralGeneratedPlane {
       scene
     );
 
-    groundPlane1.setPositionWithLocalVector(
+    this.groundPlane1.setPositionWithLocalVector(
       new BABYLON.Vector3(0, -50, START_POSITION)
     );
 
     let shaderMaterial1 = createShaderMaterial();
-    groundPlane1.material = shaderMaterial1;
+    this.groundPlane1.material = shaderMaterial1;
 
-    // Second ground
-    let groundPlane2 = groundPlane1.clone("groundPlane2");
-    groundPlane2.setPositionWithLocalVector(
-      new BABYLON.Vector3(0, -50, UPDATE_POSITION)
-    );
-
-    let randomNumber1 = getRandomNumber();
-    let randomNumber2 = getRandomNumber();
-
-    let shaderMaterial2 = createShaderMaterial(
-      scene,
-      randomNumber1,
-      randomNumber2
-    );
-    groundPlane2.material = shaderMaterial2;
-
-    shaderMaterial1.freeze();
-    shaderMaterial2.freeze();
-
-    groundPlane1.physicsImpostor = new BABYLON.PhysicsImpostor(
-      groundPlane1,
-      BABYLON.PhysicsImpostor.BoxImpostor,
-      {
-        mass: 0.0,
-        restitution: 0.9
-      },
-      scene
-    );
+    // shaderMaterial1.freeze();
 
     // Render Loop
     scene.registerBeforeRender(() => {
-      // If ground plane is behind camera: Update with new position and create new shader material
-      if (groundPlane1.position.z < BEHIND_CAMERA_POSITION)
-        updateMeshMaterial(groundPlane1);
-      else groundPlane1.position.z -= DEFAULT_MOVING_SPEED;
-
-      if (groundPlane2.position.z < BEHIND_CAMERA_POSITION)
-        updateMeshMaterial(groundPlane2);
-      else groundPlane2.position.z -= DEFAULT_MOVING_SPEED;
+      if (this.groundPlane1.position.z < BEHIND_CAMERA_POSITION)
+        updateMeshMaterial(this.groundPlane1);
+      else {
+        this.groundPlane1.position.z -= this.movingSpeed;
+      }
     });
   }
 }

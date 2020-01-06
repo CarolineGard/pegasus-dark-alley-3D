@@ -7,8 +7,8 @@ import DevFpsMeter from "./game/DevFpsMeter";
 import GuiMenu from "./game/GuiMenu";
 import GuiRestartMenu from "./game/GuiRestartMenu";
 import Hud from "./game/Hud";
-import Level from "./game/Level";
 import Light from "./game/Light";
+import ProceduralGeneratedGround from "./game/ProceduralGeneratedGround";
 import Obstacles from "./game/Obstacles";
 import Particles from "./game/Particles";
 import Player from "./game/Player";
@@ -22,7 +22,8 @@ class Game {
     this.assetsManager = null;
     this.coins = new Coins();
     this.engine = null;
-    this.level = new Level();
+    // this.level = new Level();
+    this.procedural = new ProceduralGeneratedGround();
     this.obstacles = new Obstacles();
     this.particles = new Particles();
     this.player = new Player();
@@ -47,9 +48,9 @@ class Game {
     Hud(this.scene, this.player);
 
     this.movingSpeed = DEFAULT_MOVING_SPEED;
-
-    this.level.reset();
-    this.level.startMusic(this.scene);
+    this.procedural.setup();
+    // this.level.reset();
+    // this.level.startMusic(this.scene);
 
     this.player.setup(this.scene, this.setCurrentGameMode);
 
@@ -77,8 +78,8 @@ class Game {
     this.setCurrentGameMode(0);
     this.movingSpeed = DEFAULT_MOVING_SPEED;
 
-    this.level.reset();
-    this.level.startMusic(this.scene);
+    // this.level.reset();
+    // this.level.startMusic(this.scene);
 
     this.player.reset();
     this.player.setup(this.scene, this.setCurrentGameMode);
@@ -88,6 +89,8 @@ class Game {
 
     this.trees.reset();
     this.trees.setup(this.scene);
+
+    this.procedural.setup(this.scene);
 
     this.particles.reset();
     this.particles.setup(this.scene);
@@ -106,7 +109,7 @@ class Game {
     Light(this.scene);
     SkyBox(this.scene);
 
-    this.level.setup(this.scene);
+    // this.level.setup(this.scene);
     this.trees.setup(this.scene);
 
     SceneEffects(this.scene);
@@ -116,18 +119,19 @@ class Game {
     this.scene.registerBeforeRender(() => {
       this.movingSpeed += INCREASE_SPEED;
 
-      this.level.setMovingSpeed(this.movingSpeed);
+      // this.level.setMovingSpeed(this.movingSpeed);
       this.obstacles.setMovingSpeed(this.movingSpeed);
       this.trees.setMovingSpeed(this.movingSpeed);
       this.coins.setMovingSpeed(this.movingSpeed);
       this.stars.setMovingSpeed(this.movingSpeed);
       this.particles.setMovingSpeed(this.movingSpeed);
+      this.procedural.setMovingSpeed(this.movingSpeed);
 
       if (!this.waitingForPlayerRestart) {
         if (this.currentGameMode === 0) {
         } else if (this.currentGameMode === 1) {
         } else if (this.currentGameMode === 2) {
-          this.level.stopMusic();
+          // this.level.stopMusic();
           var dieSound = new BABYLON.Sound(
             "dieSound",
             "./src/sounds/die.mp3",
